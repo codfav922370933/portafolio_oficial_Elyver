@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="es">
+
+<!-- ============================================================
+     PORTAFOLIO — ELYVER
+     Archivo: index.html
+     Descripción: Estructura principal del portafolio web.
+                  Contiene todas las secciones visibles de la página.
+     Archivos relacionados: estilos.css | scripts.js
+     ============================================================ -->
+
+<head>
+  <!-- Define la codificación de caracteres para mostrar tildes y ñ correctamente -->
+  <meta charset="UTF-8" />
+
+  <!-- Hace que la página sea responsive (se adapte a celulares y tablets) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Título que aparece en la pestaña del navegador -->
+  <title>Elyver — Portafolio</title>
+
+  <!-- Vincula el archivo de estilos CSS externo -->
+  <link rel="stylesheet" href="estilos.css" />
+
+  <!-- Preconexión a Google Fonts para cargar más rápido las fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Importa las fuentes: Tourney (títulos hero), Bebas Neue (menú y subtítulos), DM Sans (texto normal) -->
+  <link href="https://fonts.googleapis.com/css2?family=Tourney:ital,wght@0,100..900;1,100..900&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       BARRA FLOTANTE DE REDES SOCIALES
+       Aparece fija en el lado izquierdo de la pantalla.
+       Los href se actualizan desde el panel de administrador (scripts.js).
+       ============================================================ -->
+  <aside class="social-float" aria-label="Redes sociales">
+    <a href="#" title="WhatsApp" target="_blank" id="sf-whatsapp">💬</a>
+    <a href="#" title="LinkedIn" target="_blank" id="sf-linkedin">💼</a>
+    <a href="#" title="GitHub" target="_blank" id="sf-github">🐙</a>
+    <a href="#" title="Instagram" target="_blank" id="sf-instagram">📸</a>
+  </aside>
+
+
+  <!-- ============================================================
+       HEADER — BARRA DE NAVEGACIÓN SUPERIOR
+       Se mantiene fija al hacer scroll (sticky).
+       El logo tiene id="logo-secret" para activar el panel admin
+       con 3 clics rápidos (ver scripts.js).
+       ============================================================ -->
+  <header>
+
+    <!-- Logo: al hacer 3 clics rápidos abre el panel de administrador -->
+    <a href="#inicio" class="logo" id="logo-secret">
+      PORTAFOLIO <span>ELYVER</span>
+    </a>
+
+    <!-- Menú de navegación con anclas a cada sección -->
+    <nav aria-label="Secciones principales">
+      <ul>
+        <li><a href="#inicio" class="active">INICIO</a></li>
+        <li><a href="#acerca">ACERCA</a></li>
+        <li><a href="#proyectos">PROYECTOS</a></li>
+        <li><a href="#servicios">SERVICIOS</a></li>
+        <li><a href="#contacto">CONTACTO</a></li>
+      </ul>
+    </nav>
+
+    <!-- Indicador visible solo cuando el modo admin está activo -->
+    <div class="header-actions">
+      <span class="admin-indicator">● ADMIN</span>
+    </div>
+
+  </header>
+
+
+  <!-- ============================================================
+       SECCIÓN HERO — INICIO
+       Primera sección visible al abrir la página.
+       Muestra nombre, rol, descripción, botones y foto de perfil.
+       ============================================================ -->
+  <section id="inicio" class="section-pad hero-section">
+
+    <!-- Columna izquierda: texto principal -->
+    <div class="hero-text">
+
+      <!-- Badge de disponibilidad con punto animado -->
+      <span class="hero-badge">Disponible para proyectos</span>
+
+      <!-- Título principal con palabras en colores azul y rojo -->
+      <h2 class="hero-name">
+        DISEÑADOR<br>
+        <span class="accent">& DESA</span><span class="accent-red">RRO</span>LLADOR
+      </h2>
+
+      <!-- Subtítulo con especialidades -->
+      <p class="hero-role">SOFTWARE · UI/UX · WEB · MÓVIL</p>
+
+      <!-- Descripción breve editable desde el panel admin -->
+      <p class="hero-desc" id="hero-desc">
+        Creo soluciones digitales funcionales, intuitivas y visualmente atractivas.
+        Combino creatividad y lógica para transformar ideas en productos digitales modernos y competitivos.
+      </p>
+
+      <!-- Botones de acción: uno lleva a proyectos, otro a contacto -->
+      <div class="hero-ctas">
+        <a href="#proyectos" class="btn-primary">Ver Proyectos</a>
+        <a href="#contacto" class="btn-secondary">Contáctame</a>
+      </div>
+
+    </div>
+
+    <!-- Columna derecha: foto de perfil y estadísticas -->
+    <div class="hero-visual">
+      <div>
+
+        <!-- Tarjeta con foto de perfil y borde degradado azul/rojo -->
+        <div class="profile-card">
+          <div class="profile-img-wrap">
+            <!-- Si no encuentra Elyver.jpeg muestra un ícono de reemplazo -->
+            <img src="Elyver.jpeg" alt="Elyver"
+              onerror="this.parentElement.innerHTML='<div class=\'profile-img-placeholder\'>👨‍💻<span>ELYVER</span></div>'">
+          </div>
+        </div>
+
+        <!-- Cuadrícula de 4 estadísticas debajo de la foto -->
+        <div class="profile-stats">
+          <div class="stat-chip">
+            <!-- El id permite actualizar el valor desde el panel admin -->
+            <div class="stat-num" id="stat-proyectos">6+</div>
+            <div class="stat-label">Proyectos</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-num" id="stat-exp">2+</div>
+            <div class="stat-label">Años exp.</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-num" id="stat-clientes">10+</div>
+            <div class="stat-label">Clientes</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-num" id="stat-tech">8+</div>
+            <div class="stat-label">Tecnologías</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Línea divisora entre secciones -->
+  <hr class="divider">
+
+
+  <!-- ============================================================
+       SECCIÓN ACERCA — CONÓCEME MÁS
+       Muestra foto de perfil, bio, habilidades y tarjetas de info.
+       Fondo ligeramente distinto (bg2) para diferenciarse del hero.
+       ============================================================ -->
+  <section id="acerca" class="section-pad">
+
+    <!-- Encabezado de la sección -->
+    <div class="section-header">
+      <span class="section-tag">// Sobre mí</span>
+      <h2 class="section-title">CONÓCEME <span class="red">MÁS</span></h2>
+    </div>
+
+    <!-- Cuadrícula de 3 columnas: foto | texto + skills | tarjetas info -->
+    <div class="acerca-grid">
+
+      <!-- Columna 1: Foto de perfil con marco degradado -->
+      <div class="acerca-foto-col">
+        <div class="acerca-foto-wrapper">
+          <!-- Capa del degradado de borde -->
+          <div class="acerca-foto-borde"></div>
+          <!-- Contenedor de la imagen -->
+          <div class="acerca-foto-img">
+            <img src="Elyver.jpeg" alt="Elyver"
+              onerror="this.parentElement.innerHTML='<div class=\'acerca-foto-placeholder\'>👨‍💻</div>'">
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna 2: Texto bio y lista de habilidades -->
+      <div>
+        <!-- Texto de presentación editable desde panel admin -->
+        <p class="about-text" id="about-text">
+          Mi nombre es <strong>ELYVER</strong>, tengo <strong>24 años</strong> y soy un apasionado desarrollador de software.
+          Me especializo en crear soluciones digitales funcionales, intuitivas y visualmente atractivas.
+          Mi enfoque se centra en el diseño de interfaces centradas en el usuario <strong>(UI/UX)</strong> y el
+          desarrollo de aplicaciones web y móviles.<br><br>
+          Trabajo con metodologías ágiles, priorizando la calidad del código, la experiencia del usuario y el
+          cumplimiento de los objetivos del negocio.
+        </p>
+
+        <!-- Chips de habilidades técnicas, editables desde panel admin -->
+        <div class="skills-list" id="skills-list">
+          <span class="skill-tag">HTML / CSS</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">Flutter</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">UI/UX Design</span>
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">Node.js</span>
+          <span class="skill-tag">Git</span>
+        </div>
+      </div>
+
+      <!-- Columna 3: Tarjetas de información adicional -->
+      <div class="acerca-cards-col">
+
+        <!-- Tarjeta: Enfoque profesional -->
+        <div class="servicio-card acerca-info-card">
+          <div class="acerca-card-titulo">🎯 Enfoque</div>
+          <p class="srv-desc">Desarrollo centrado en el usuario, código limpio y resultados medibles.</p>
+        </div>
+
+        <!-- Tarjeta: Metodología de trabajo -->
+        <div class="servicio-card acerca-info-card">
+          <div class="acerca-card-titulo">⚡ Metodología</div>
+          <p class="srv-desc">Agile/Scrum, iteración rápida, comunicación constante con el cliente.</p>
+        </div>
+
+        <!-- Tarjeta: Ubicación, editable desde panel admin -->
+        <div class="servicio-card acerca-info-card">
+          <div class="acerca-card-titulo">🌎 Ubicación</div>
+          <p class="srv-desc" id="about-ubicacion">Pimentel, Chiclayo, Perú — Disponible remotamente.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+
+  <!-- ============================================================
+       SECCIÓN PROYECTOS — TRABAJO DESTACADO
+       La cuadrícula se genera dinámicamente desde scripts.js
+       con los datos del array state.proyectos.
+       En modo admin aparece el botón "Agregar Proyecto".
+       ============================================================ -->
+  <section id="proyectos" class="section-pad">
+
+    <!-- Encabezado con botón de agregar (oculto fuera del modo admin) -->
+    <div class="section-header proyectos-header">
+      <div>
+        <span class="section-tag">// Mi trabajo</span>
+        <h2 class="section-title">PROYECTOS <span class="red">DESTACADOS</span></h2>
+      </div>
+      <!-- Botón visible solo en modo admin, llama a openAddProject() en scripts.js -->
+      <button class="btn-admin-action" id="btn-add-project" style="display:none;" onclick="openAddProject()">
+        + Agregar Proyecto
+      </button>
+    </div>
+
+    <!-- Contenedor donde scripts.js inyecta las tarjetas de proyectos -->
+    <div class="proyectos-grid" id="proyectos-grid">
+      <!-- Contenido generado por renderProyectos() en scripts.js -->
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+
+  <!-- ============================================================
+       SECCIÓN SERVICIOS — LO QUE OFREZCO
+       La cuadrícula se genera dinámicamente desde scripts.js
+       con los datos del array state.servicios.
+       ============================================================ -->
+  <section id="servicios" class="section-pad seccion-oscura">
+
+    <div class="section-header">
+      <span class="section-tag">// Lo que ofrezco</span>
+      <h2 class="section-title">MIS <span class="red">SERVICIOS</span></h2>
+    </div>
+
+    <!-- Contenedor donde scripts.js inyecta las tarjetas de servicios -->
+    <div class="servicios-grid" id="servicios-grid">
+      <!-- Contenido generado por renderServicios() en scripts.js -->
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+
+  <!-- ============================================================
+       SECCIÓN CONTACTO — PONTE EN CONTACTO
+       Lado izquierdo: links de contacto con íconos.
+       Lado derecho: formulario de mensaje.
+       Los valores de contacto se actualizan desde scripts.js.
+       ============================================================ -->
+  <section id="contacto" class="section-pad">
+
+    <div class="section-header">
+      <span class="section-tag">// Hablemos</span>
+      <h2 class="section-title">PONTE EN <span class="red">CONTACTO</span></h2>
+    </div>
+
+    <!-- Layout de 2 columnas: info de contacto | formulario -->
+    <div class="contacto-layout">
+
+      <!-- Columna izquierda: presentación y links de contacto -->
+      <div class="contacto-info">
+        <h3>¿Tienes un proyecto en mente?</h3>
+        <p>Estoy disponible para consultas, desarrollo de proyectos, colaboraciones y asesorías tecnológicas.
+          Convirtamos tu idea en una solución digital profesional.</p>
+
+        <!-- Lista de links de contacto, los href y valores se actualizan desde scripts.js -->
+        <div class="contacto-links" id="contacto-links">
+
+          <!-- Link WhatsApp -->
+          <a href="#" class="contacto-link" id="link-whatsapp">
+            <span class="contacto-link-icon">💬</span>
+            <div class="contacto-link-info">
+              <div class="contacto-link-label">WhatsApp</div>
+              <!-- El texto del número se actualiza con renderContact() -->
+              <div class="contacto-link-value" id="val-whatsapp">+51 XXX XXX XXX</div>
+            </div>
+            <span class="contacto-link-arrow">→</span>
+          </a>
+
+          <!-- Link Correo Electrónico -->
+          <a href="#" class="contacto-link" id="link-email">
+            <span class="contacto-link-icon">📧</span>
+            <div class="contacto-link-info">
+              <div class="contacto-link-label">Correo Electrónico</div>
+              <div class="contacto-link-value" id="val-email"><span class="__cf_email__" data-cfemail="ec9899ac89818d8580c28f8381">[email&#160;protected]</span></div>
+            </div>
+            <span class="contacto-link-arrow">→</span>
+          </a>
+
+          <!-- Link LinkedIn -->
+          <a href="#" class="contacto-link" id="link-linkedin">
+            <span class="contacto-link-icon">💼</span>
+            <div class="contacto-link-info">
+              <div class="contacto-link-label">LinkedIn</div>
+              <div class="contacto-link-value" id="val-linkedin">linkedin.com/in/elyver</div>
+            </div>
+            <span class="contacto-link-arrow">→</span>
+          </a>
+
+          <!-- Link GitHub -->
+          <a href="#" class="contacto-link" id="link-github">
+            <span class="contacto-link-icon">🐙</span>
+            <div class="contacto-link-info">
+              <div class="contacto-link-label">GitHub</div>
+              <div class="contacto-link-value" id="val-github">github.com/elyver</div>
+            </div>
+            <span class="contacto-link-arrow">→</span>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Columna derecha: formulario de contacto -->
+      <div>
+        <div class="contacto-form">
+
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Tu nombre completo">
+          </div>
+
+          <div class="form-group">
+            <label>Correo</label>
+            <input type="email" placeholder="tu@correo.com">
+          </div>
+
+          <div class="form-group">
+            <label>Asunto</label>
+            <input type="text" placeholder="¿En qué te puedo ayudar?">
+          </div>
+
+          <div class="form-group">
+            <label>Mensaje</label>
+            <textarea placeholder="Cuéntame sobre tu proyecto..."></textarea>
+          </div>
+
+          <!-- Al hacer clic llama a showToast() en scripts.js para mostrar confirmación -->
+          <button class="btn-primary btn-full"
+            onclick="showToast('Mensaje enviado. Te responderé pronto 🚀','success')">
+            Enviar Mensaje
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER — PIE DE PÁGINA
+       Muestra copyright y links de redes sociales.
+       Los href se actualizan desde scripts.js con renderContact().
+       ============================================================ -->
+  <footer>
+    <p class="footer-copy">© 2025 <strong>ELYVER</strong> — Todos los derechos reservados.</p>
+    <div class="footer-social">
+      <a href="#" id="fs-whatsapp" title="WhatsApp">💬</a>
+      <a href="#" id="fs-linkedin" title="LinkedIn">💼</a>
+      <a href="#" id="fs-github" title="GitHub">🐙</a>
+      <a href="#" id="fs-instagram" title="Instagram">📸</a>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       BARRA DE ADMINISTRADOR
+       Aparece fija en la parte inferior solo cuando el modo
+       admin está activo (clase "admin-mode" en body).
+       Permite editar contacto, info personal y agregar proyectos.
+       ============================================================ -->
+  <div class="admin-bar">
+    <span class="admin-bar-label">⚙ MODO ADMIN</span>
+    <div class="admin-bar-actions">
+      <!-- Cada botón llama a una función de scripts.js -->
+      <button class="btn-admin-action" onclick="openEditContact()">✏ Contacto & Redes</button>
+      <button class="btn-admin-action" onclick="openEditAbout()">✏ Información personal</button>
+      <button class="btn-admin-action" onclick="openAddProject()">+ Proyecto</button>
+    </div>
+    <button class="btn-admin-exit" onclick="exitAdmin()">✕ Salir</button>
+  </div>
+
+
+  <!-- ============================================================
+       MODALES — VENTANAS EMERGENTES DEL PANEL ADMIN
+       Se abren/cierran con openModal() y closeModal() en scripts.js.
+       Solo son visibles cuando tienen la clase "open".
+       ============================================================ -->
+
+  <!-- Modal: Login de administrador -->
+  <div class="modal-overlay" id="modal-login">
+    <div class="modal login-modal">
+      <h2>⚙ Acceso Admin</h2>
+      <div class="form-group">
+        <!-- Al presionar Enter también intenta ingresar (ver scripts.js) -->
+        <label>Contraseña</label>
+        <input type="password" id="admin-pass" placeholder="Ingresa la contraseña"
+          onkeydown="if(event.key==='Enter') tryLogin()">
+      </div>
+      <p class="login-hint">Panel de administración.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('modal-login')">Cancelar</button>
+        <button class="btn-save" onclick="tryLogin()">Ingresar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Agregar o editar un proyecto -->
+  <div class="modal-overlay" id="modal-proyecto">
+    <div class="modal">
+      <!-- El título cambia entre "Agregar" y "Editar" según el caso -->
+      <h2 id="modal-proyecto-title">Agregar Proyecto</h2>
+      <!-- Campo oculto que guarda el índice del proyecto a editar (-1 = nuevo) -->
+      <input type="hidden" id="edit-proyecto-idx" value="-1">
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" id="p-titulo" placeholder="Nombre del proyecto">
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="p-desc" placeholder="Descripción breve..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>URL de Imagen</label>
+        <input type="text" id="p-img" placeholder="https://... o nombre de archivo local">
+      </div>
+      <div class="form-group">
+        <label>Etiquetas (separadas por coma)</label>
+        <input type="text" id="p-tags" placeholder="React, Firebase, UI/UX">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('modal-proyecto')">Cancelar</button>
+        <button class="btn-save" onclick="saveProject()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar datos de contacto y redes sociales -->
+  <div class="modal-overlay" id="modal-contact">
+    <div class="modal">
+      <h2>✏ Contacto & Redes Sociales</h2>
+      <div class="form-group">
+        <label>WhatsApp (número con código de país)</label>
+        <input type="text" id="c-whatsapp" placeholder="+51 999 999 999">
+      </div>
+      <div class="form-group">
+        <label>Correo Electrónico</label>
+        <input type="email" id="c-email" placeholder="tu@email.com">
+      </div>
+      <div class="form-group">
+        <label>LinkedIn (URL completa)</label>
+        <input type="text" id="c-linkedin" placeholder="https://linkedin.com/in/usuario">
+      </div>
+      <div class="form-group">
+        <label>GitHub (URL completa)</label>
+        <input type="text" id="c-github" placeholder="https://github.com/usuario">
+      </div>
+      <div class="form-group">
+        <label>Instagram (URL completa)</label>
+        <input type="text" id="c-instagram" placeholder="https://instagram.com/usuario">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('modal-contact')">Cancelar</button>
+        <button class="btn-save" onclick="saveContact()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar información personal (bio, skills, estadísticas) -->
+  <div class="modal-overlay" id="modal-about">
+    <div class="modal">
+      <h2>✏ Información Personal</h2>
+      <div class="form-group">
+        <label>Descripción principal (sección hero)</label>
+        <textarea id="a-herodesc"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Texto "Acerca de mí"</label>
+        <textarea id="a-about"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Ubicación</label>
+        <input type="text" id="a-ubicacion" placeholder="Ciudad, País">
+      </div>
+      <div class="form-group">
+        <label>Habilidades (separadas por coma)</label>
+        <input type="text" id="a-skills" placeholder="HTML, CSS, JavaScript, React...">
+      </div>
+      <div class="form-group">
+        <label>Estadística — Proyectos</label>
+        <input type="text" id="a-stat-p" placeholder="6+">
+      </div>
+      <div class="form-group">
+        <label>Estadística — Años de experiencia</label>
+        <input type="text" id="a-stat-e" placeholder="2+">
+      </div>
+      <div class="form-group">
+        <label>Estadística — Clientes</label>
+        <input type="text" id="a-stat-c" placeholder="10+">
+      </div>
+      <div class="form-group">
+        <label>Estadística — Tecnologías</label>
+        <input type="text" id="a-stat-t" placeholder="8+">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('modal-about')">Cancelar</button>
+        <button class="btn-save" onclick="saveAbout()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificación flotante (toast) para confirmaciones y errores -->
+  <div class="toast" id="toast"></div>
+
+
+  <!-- ============================================================
+       SCRIPTS
+       Se cargan al final del body para que el HTML ya esté listo
+       cuando JavaScript intente acceder a los elementos del DOM.
+       =================================

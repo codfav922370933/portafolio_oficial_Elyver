@@ -1,0 +1,1435 @@
+/* ================================================================
+   PORTAFOLIO — ELYVER
+   Archivo: estilos.css
+   Descripción: Todos los estilos visuales del portafolio.
+   Estructura:
+     1. Variables globales (colores, fuentes, tamaños)
+     2. Reset y base
+     3. Header y navegación
+     4. Sección Hero (inicio)
+     5. Sección Acerca
+     6. Sección Proyectos
+     7. Sección Servicios
+     8. Sección Contacto
+     9. Footer
+    10. Panel de administrador
+    11. Modales
+    12. Animaciones
+    13. Diseño responsive
+   ================================================================ */
+
+
+/* ================================================================
+   1. VARIABLES GLOBALES
+   Define todos los colores, fuentes y valores reutilizables.
+   Para cambiar el color principal del sitio, solo edita --blue aquí.
+   ================================================================ */
+:root {
+  /* Colores de fondo (de más oscuro a menos oscuro) */
+  --bg:       #060810;   /* Fondo principal muy oscuro */
+  --bg2:      #0c1020;   /* Fondo alternativo de secciones */
+  --surface:  #111827;   /* Fondo de tarjetas y elementos */
+  --surface2: #1a2235;   /* Fondo de modales y paneles */
+
+  /* Color de borde semitransparente con tono azul */
+  --border: rgba(0, 200, 83, 0.18);
+
+  /* Color azul principal y su versión con brillo (glow) */
+  --blue:      #00c853;
+  --blue-glow: rgba(0, 200, 83, 0.35);
+
+  /* Color rojo de acento y su versión con brillo */
+  --red:      #ff2040;
+  --red-glow: rgba(255, 32, 64, 0.35);
+
+  /* Colores de texto */
+  --white: #f0f4ff;   /* Texto principal casi blanco */
+  --muted: #7a8aaa;   /* Texto secundario grisáceo */
+
+  /* Familias de fuentes */
+  --font-display: "Tourney", sans-serif;    /* Para el logo y título hero */
+  --font-title:   "Bebas Neue", sans-serif; /* Para títulos de secciones y menú */
+  --font-body:    "DM Sans", sans-serif;    /* Para párrafos y textos generales */
+
+  /* Radio de borde para tarjetas y botones */
+  --radius: 14px;
+
+  /* Transición estándar para animaciones hover */
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ================================================================
+   2. RESET Y BASE
+   Elimina márgenes/paddings por defecto y define comportamientos
+   globales del documento.
+   ================================================================ */
+
+/* Aplica box-sizing: border-box a todos los elementos para que
+   el padding no afecte el tamaño total del elemento */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Activa el scroll suave al hacer clic en los enlaces del menú */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilos base del cuerpo de la página */
+body {
+  background: var(--bg);        /* Fondo oscuro */
+  color: var(--white);          /* Texto blanco por defecto */
+  font-family: var(--font-body);/* Fuente base para todo el sitio */
+  min-height: 100vh;            /* La página ocupa mínimo toda la pantalla */
+  overflow-x: hidden;           /* Evita scroll horizontal no deseado */
+}
+
+/* Capa de textura (ruido) superpuesta sobre toda la página
+   para dar profundidad visual. No interfiere con los clics. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0; /* Ocupa toda la pantalla */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; /* No bloquea los clics del usuario */
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* Las secciones necesitan z-index positivo para estar sobre la textura */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Línea divisora entre secciones */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* Espaciado interno estándar para todas las secciones */
+.section-pad {
+  padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+  /* clamp(mínimo, preferido, máximo) — se adapta al tamaño de pantalla */
+}
+
+/* Sección con fondo alternativo (más oscuro) */
+.seccion-oscura {
+  background: var(--bg2);
+}
+
+/* Espacio inferior del encabezado de cada sección */
+.section-header {
+  margin-bottom: 3rem;
+}
+
+/* Etiqueta pequeña arriba del título de sección (ej: "// Mi trabajo") */
+.section-tag {
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  color: var(--blue);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Título principal de cada sección */
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Palabra en rojo dentro del título de sección */
+.section-title .red {
+  color: var(--red);
+}
+
+
+/* ================================================================
+   3. HEADER Y NAVEGACIÓN
+   Barra superior fija que permanece visible al hacer scroll.
+   ================================================================ */
+
+/* Contenedor principal del header */
+header {
+  position: sticky;       /* Se queda pegado arriba al hacer scroll */
+  top: 0;
+  z-index: 100;           /* Siempre por encima del contenido */
+  background: rgba(6, 8, 16, 0.85); /* Fondo semitransparente */
+  backdrop-filter: blur(20px);      /* Efecto de vidrio esmerilado */
+  border-bottom: 1px solid var(--border);
+  padding: 0 clamp(1rem, 4vw, 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;           /* Altura fija del header */
+}
+
+/* Logo del portafolio (doble clic secreto activa el admin) */
+.logo {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--white);
+  text-shadow: 0 0 20px var(--blue-glow); /* Resplandor azul */
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+/* Nombre "ELYVER" en rojo debajo de "PORTAFOLIO" */
+.logo span {
+  font-family: var(--font-title);
+  font-size: 0.7em;
+  color: var(--red);
+  letter-spacing: 0.25em;
+  text-shadow: 0 0 10px var(--red-glow);
+}
+
+/* Lista del menú de navegación en fila horizontal */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0.2rem;
+}
+
+/* Cada enlace del menú */
+nav a {
+  text-decoration: none;
+  color: var(--muted);
+  font-family: var(--font-title);
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  transition: var(--transition);
+  position: relative; /* Necesario para el pseudo-elemento ::after */
+}
+
+/* Línea azul que aparece debajo del enlace al hacer hover */
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: var(--blue);
+  transform: scaleX(0);         /* Comienza invisible (escala 0) */
+  transition: var(--transition);
+  border-radius: 2px;
+}
+
+/* Efecto hover: texto blanco y fondo azul semitransparente */
+nav a:hover {
+  color: var(--white);
+  background: rgba(0, 200, 83, 0.1);
+}
+
+/* La línea debajo se expande al hacer hover */
+nav a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Estilo del enlace de la sección activa (sección visible actualmente) */
+nav a.active {
+  color: var(--red);
+  background: rgba(255, 32, 64, 0.08);
+}
+
+/* La línea del activo es roja y siempre visible */
+nav a.active::after {
+  transform: scaleX(1);
+  background: var(--red);
+}
+
+/* Contenedor de la esquina derecha del header */
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* Indicador "● ADMIN" que aparece solo en modo administrador */
+.admin-indicator {
+  display: none; /* Oculto por defecto */
+  background: rgba(255, 32, 64, 0.12);
+  border: 1px solid rgba(255, 32, 64, 0.3);
+  color: var(--red);
+  font-family: var(--font-title);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+}
+
+/* Cuando body tiene clase "admin-mode" (scripts.js), muestra el indicador */
+.admin-mode .admin-indicator {
+  display: block;
+}
+
+
+/* ================================================================
+   4. BARRA FLOTANTE DE REDES SOCIALES
+   Aparece fija en el lado izquierdo de la pantalla.
+   ================================================================ */
+.social-float {
+  position: fixed;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%); /* Centrado vertical exacto */
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 50;
+}
+
+/* Cada ícono de red social */
+.social-float a {
+  width: 40px;
+  height: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: var(--transition);
+  color: var(--muted);
+}
+
+/* Hover: se pone azul y se desplaza levemente a la derecha */
+.social-float a:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px var(--blue-glow);
+}
+
+
+/* ================================================================
+   5. SECCIÓN HERO — INICIO
+   Primera pantalla visible. Layout de 2 columnas.
+   ================================================================ */
+
+/* Layout en 2 columnas: texto a la izquierda, foto a la derecha */
+.hero-section {
+  min-height: calc(100vh - 64px); /* Ocupa toda la pantalla menos el header */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+  padding-left: clamp(4rem, 8vw, 7rem); /* Espacio extra izquierdo (barra social) */
+}
+
+/* Contenedor de la columna de texto */
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Badge "Disponible para proyectos" con punto parpadeante */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 200, 83, 0.12);
+  border: 1px solid rgba(0, 200, 83, 0.3);
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #69f0ae;
+  letter-spacing: 0.1em;
+  width: fit-content;
+  animation: fadeInDown 0.7s ease both; /* Aparece desde arriba al cargar */
+}
+
+/* Punto verde/azul parpadeante del badge */
+.hero-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background: var(--blue);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--blue);
+  animation: pulse 2s infinite; /* Parpadea constantemente */
+}
+
+/* Nombre grande "DISEÑADOR & DESARROLLADOR" */
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem); /* Tamaño fluido según pantalla */
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  animation: fadeInUp 0.7s 0.1s ease both;
+}
+
+/* Parte del nombre en azul con resplandor */
+.hero-name .accent {
+  color: var(--blue);
+  text-shadow: 0 0 40px var(--blue-glow);
+}
+
+/* Parte del nombre en rojo con resplandor */
+.hero-name .accent-red {
+  color: var(--red);
+  text-shadow: 0 0 40px var(--red-glow);
+}
+
+/* Subtítulo de especialidades */
+.hero-role {
+  font-family: var(--font-title);
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  animation: fadeInUp 0.7s 0.2s ease both;
+}
+
+/* Párrafo de descripción */
+.hero-desc {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 480px;
+  animation: fadeInUp 0.7s 0.3s ease both;
+}
+
+/* Contenedor de los botones de acción */
+.hero-ctas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.7s 0.4s ease both;
+}
+
+/* Botón principal (azul sólido) */
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 10px;
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: 0 4px 24px var(--blue-glow);
+  display: inline-block;
+}
+
+/* Hover: sube levemente y la sombra se intensifica */
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px var(--blue-glow);
+  background: #00e676;
+}
+
+/* Botón full width (para el formulario de contacto) */
+.btn-full {
+  width: 100%;
+}
+
+/* Botón secundario (borde transparente) */
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--border);
+  padding: 0.75rem 2rem;
+  border-radius: 10px;
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  display: inline-block;
+}
+
+/* Hover: borde y texto se vuelven azules */
+.btn-secondary:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  transform: translateY(-2px);
+}
+
+/* Columna de la foto de perfil: centrada */
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInRight 0.8s 0.2s ease both;
+}
+
+/* Tarjeta que contiene la foto (tiene borde degradado) */
+.profile-card {
+  position: relative;
+  width: 320px;
+}
+
+/* Borde degradado azul-rojo alrededor de la foto */
+.profile-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px; /* Sobresale 2px del contenedor */
+  background: linear-gradient(135deg, var(--blue), transparent 50%, var(--red));
+  border-radius: calc(var(--radius) + 2px);
+  z-index: -1;
+}
+
+/* Contenedor interno de la foto */
+.profile-img-wrap {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 3/4; /* Proporción 3:4 para foto de retrato */
+}
+
+/* La imagen de perfil llena todo el contenedor */
+.profile-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Recorta la imagen para llenar sin deformar */
+  display: block;
+}
+
+/* Placeholder con emoji si no carga la imagen */
+.profile-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--surface2), var(--bg2));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--muted);
+  font-size: 4rem;
+}
+
+/* Cuadrícula de 4 estadísticas debajo de la foto */
+.profile-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Cada chip de estadística */
+.stat-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  text-align: center;
+}
+
+/* Número grande en azul */
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+/* Texto descriptivo del número */
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+
+/* ================================================================
+   6. SECCIÓN ACERCA — CONÓCEME MÁS
+   Layout de 3 columnas: foto | texto + skills | tarjetas info.
+   ================================================================ */
+
+/* Sección con fondo alternativo */
+#acerca {
+  background: var(--bg2);
+}
+
+/* Cuadrícula de 3 columnas */
+.acerca-grid {
+  display: grid;
+  grid-template-columns: auto 1fr 1.2fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* Columna de la foto: centrada verticalmente */
+.acerca-foto-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Contenedor con posición relativa para el borde degradado */
+.acerca-foto-wrapper {
+  position: relative;
+}
+
+/* Capa del borde degradado azul-rojo */
+.acerca-foto-borde {
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--blue), transparent 50%, var(--red));
+  border-radius: calc(var(--radius) + 2px);
+  z-index: 0;
+}
+
+/* Contenedor de la imagen en la sección acerca */
+.acerca-foto-img {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  width: 220px;
+  height: 270px;
+}
+
+/* La imagen llena el contenedor sin deformarse */
+.acerca-foto-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder si no carga la imagen */
+.acerca-foto-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--surface2), var(--bg2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+}
+
+/* Texto de presentación personal */
+.about-text {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* Palabras destacadas dentro del texto bio */
+.about-text strong {
+  color: var(--white);
+}
+
+/* Contenedor de chips de habilidades */
+.skills-list {
+  display: flex;
+  flex-wrap: wrap; /* Se va a la siguiente línea si no caben */
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+/* Cada chip de habilidad (ej: "React", "Python") */
+.skill-tag {
+  background: rgba(0, 200, 83, 0.1);
+  border: 1px solid rgba(0, 200, 83, 0.25);
+  color: #69f0ae;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px; /* Borde completamente redondeado */
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+}
+
+/* Columna derecha con las 3 tarjetas de info (Enfoque, Metodología, Ubicación) */
+.acerca-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Tarjetas dentro de la sección acerca */
+.acerca-info-card {
+  padding: 1.25rem 1.5rem !important;
+}
+
+/* Título de cada tarjeta info */
+.acerca-card-titulo {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+
+
+/* ================================================================
+   7. SECCIÓN PROYECTOS
+   Cuadrícula de tarjetas generadas dinámicamente por scripts.js.
+   ================================================================ */
+
+/* Cabecera de la sección con título y botón de agregar */
+.proyectos-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Cuadrícula responsiva de tarjetas de proyectos */
+.proyectos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  /* auto-fill: crea tantas columnas como quepan de mínimo 300px */
+  gap: 1.5rem;
+}
+
+/* Tarjeta individual de proyecto */
+.proyecto-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+
+/* Hover: sube, borde azul y sombra profunda */
+.proyecto-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 200, 83, 0.5);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 200, 83, 0.2);
+}
+
+/* Contenedor de la imagen (con overflow hidden para el zoom) */
+.proyecto-img-wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Imagen del proyecto */
+.proyecto-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: var(--transition);
+}
+
+/* La imagen hace zoom al hacer hover en la tarjeta */
+.proyecto-card:hover img {
+  transform: scale(1.04);
+}
+
+/* Capa oscura que aparece sobre la imagen al hacer hover */
+.proyecto-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6, 8, 16, 0.9) 0%, transparent 60%);
+  opacity: 0;          /* Invisible por defecto */
+  transition: var(--transition);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.2rem;
+}
+
+/* La capa aparece al hacer hover */
+.proyecto-card:hover .proyecto-overlay {
+  opacity: 1;
+}
+
+/* Área de texto de la tarjeta */
+.proyecto-info {
+  padding: 1.2rem;
+}
+
+/* Nombre del proyecto */
+.proyecto-title {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+}
+
+/* Descripción breve del proyecto */
+.proyecto-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Fila de etiquetas de tecnologías */
+.proyecto-tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+/* Chip de tecnología (ej: "React", "SQL") */
+.proyecto-tag {
+  background: rgba(0, 200, 83, 0.12);
+  color: #69f0ae;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+
+/* Botones de editar/eliminar (solo visibles en modo admin) */
+.admin-card-actions {
+  display: none; /* Ocultos por defecto */
+  gap: 0.5rem;
+  padding: 0.75rem 1.2rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Se muestran cuando body tiene clase "admin-mode" */
+.admin-mode .admin-card-actions {
+  display: flex;
+}
+
+/* Estilo base de los botones Editar y Eliminar */
+.btn-edit, .btn-delete {
+  flex: 1;
+  padding: 0.4rem;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+/* Botón Editar: azul */
+.btn-edit {
+  background: rgba(0, 200, 83, 0.15);
+  color: #69f0ae;
+}
+.btn-edit:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* Botón Eliminar: rojo */
+.btn-delete {
+  background: rgba(255, 32, 64, 0.12);
+  color: #ff7a8a;
+}
+.btn-delete:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+
+/* ================================================================
+   8. SECCIÓN SERVICIOS
+   Cuadrícula de tarjetas con animación de línea superior.
+   ================================================================ */
+
+/* Fondo alternativo para la sección */
+#servicios {
+  background: var(--bg2);
+}
+
+/* Cuadrícula responsiva de tarjetas de servicios */
+.servicios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+/* Tarjeta individual de servicio */
+.servicio-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden; /* Necesario para ocultar la línea ::before */
+}
+
+/* Línea degradada azul-roja en la parte superior de la tarjeta */
+.servicio-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--red));
+  transform: scaleX(0);         /* Invisible por defecto */
+  transition: var(--transition);
+}
+
+/* La línea se expande al hacer hover */
+.servicio-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Hover: sube y agrega sombra */
+.servicio-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 200, 83, 0.3);
+}
+
+/* Emoji grande representativo del servicio */
+.srv-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Nombre del servicio */
+.srv-titulo {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+/* Descripción del servicio */
+.srv-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+
+/* ================================================================
+   9. SECCIÓN CONTACTO
+   Layout de 2 columnas: links de contacto | formulario.
+   ================================================================ */
+
+/* Layout de 2 columnas */
+.contacto-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* Título "¿Tienes un proyecto en mente?" */
+.contacto-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* Párrafo de introducción */
+.contacto-info p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+/* Columna vertical de links de contacto */
+.contacto-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Cada link de contacto (WhatsApp, Email, LinkedIn, GitHub) */
+.contacto-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  color: var(--white);
+  transition: var(--transition);
+}
+
+/* Hover: borde azul y desplazamiento a la derecha */
+.contacto-link:hover {
+  border-color: var(--blue);
+  background: rgba(0, 200, 83, 0.08);
+  transform: translateX(4px);
+}
+
+/* Emoji/ícono del link */
+.contacto-link-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0; /* No se reduce si hay poco espacio */
+}
+
+/* Contenedor del label y valor del link */
+.contacto-link-info {
+  flex: 1; /* Ocupa el espacio disponible */
+}
+
+/* Texto pequeño "WhatsApp", "Correo", etc. */
+.contacto-link-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Valor del contacto (número, email, URL) */
+.contacto-link-value {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  margin-top: 0.1rem;
+}
+
+/* Flecha "→" al final del link */
+.contacto-link-arrow {
+  color: var(--muted);
+  transition: var(--transition);
+}
+
+/* La flecha se pone azul y avanza al hacer hover */
+.contacto-link:hover .contacto-link-arrow {
+  color: var(--blue);
+  transform: translateX(3px);
+}
+
+/* Formulario de contacto */
+.contacto-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Grupo de campo: label + input/textarea */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* Etiqueta de cada campo */
+.form-group label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Estilo base de inputs y textareas */
+.form-group input,
+.form-group textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition);
+  resize: vertical; /* Solo permite redimensionar verticalmente */
+}
+
+/* Borde azul y sombra suave al hacer focus */
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
+}
+
+/* Altura mínima del textarea */
+.form-group textarea {
+  min-height: 120px;
+}
+
+
+/* ================================================================
+   10. FOOTER — PIE DE PÁGINA
+   ================================================================ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem clamp(1.5rem, 6vw, 5rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap; /* Se adapta si no caben en una línea */
+}
+
+/* Texto de copyright */
+.footer-copy {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* Fila de íconos de redes sociales en el footer */
+.footer-social {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Cada ícono del footer */
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1rem;
+  color: var(--muted);
+  transition: var(--transition);
+}
+
+/* Hover: fondo azul */
+.footer-social a:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+
+/* ================================================================
+   11. PANEL DE ADMINISTRADOR
+   Barra flotante en la parte inferior de la pantalla.
+   Solo visible cuando body tiene clase "admin-mode".
+   ================================================================ */
+
+/* Barra flotante del panel admin */
+.admin-bar {
+  display: none; /* Oculta por defecto */
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%); /* Centrado horizontal */
+  background: var(--surface2);
+  border: 1px solid rgba(0, 200, 83, 0.4);
+  border-radius: 999px;
+  padding: 0.6rem 1.5rem;
+  gap: 1rem;
+  align-items: center;
+  z-index: 200;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 200, 83, 0.15);
+  backdrop-filter: blur(16px);
+}
+
+/* Se muestra cuando body tiene clase "admin-mode" */
+.admin-mode .admin-bar {
+  display: flex;
+}
+
+/* Texto "⚙ MODO ADMIN" de la barra */
+.admin-bar-label {
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  color: var(--blue);
+}
+
+/* Contenedor de los botones de acción del admin */
+.admin-bar-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* Botones de acción del admin (Editar, Agregar) */
+.btn-admin-action {
+  background: rgba(0, 200, 83, 0.15);
+  border: 1px solid rgba(0, 200, 83, 0.3);
+  color: #69f0ae;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-admin-action:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+/* Botón "✕ Salir" del modo admin */
+.btn-admin-exit {
+  background: rgba(255, 32, 64, 0.12);
+  border: 1px solid rgba(255, 32, 64, 0.25);
+  color: #ff7a8a;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-admin-exit:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+
+/* ================================================================
+   12. MODALES — VENTANAS EMERGENTES
+   Fondo oscuro que cubre toda la pantalla + ventana centrada.
+   ================================================================ */
+
+/* Capa de fondo oscuro del modal */
+.modal-overlay {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px); /* Desenfoca el fondo */
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Cuando tiene clase "open" se vuelve visible y centra el contenido */
+.modal-overlay.open {
+  display: flex;
+}
+
+/* Ventana del modal */
+.modal {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;         /* Scroll interno si hay mucho contenido */
+  animation: scaleIn 0.25s ease; /* Aparece con animación de escala */
+}
+
+/* Título del modal */
+.modal h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* Espaciado entre campos del formulario dentro del modal */
+.modal .form-group {
+  margin-bottom: 0.75rem;
+}
+
+/* Fila de botones al final del modal */
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+}
+
+/* Botón guardar/confirmar */
+.btn-save {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-save:hover {
+  background: #00e676;
+}
+
+/* Botón cancelar */
+.btn-cancel {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-cancel:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* Modal de login: más pequeño y centrado */
+.login-modal {
+  max-width: 380px;
+  text-align: center;
+}
+.login-modal .form-group {
+  text-align: left;
+}
+
+/* Texto de ayuda dentro del modal */
+.login-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* Notificación flotante (toast) para confirmaciones */
+.toast {
+  position: fixed;
+  bottom: 5rem;
+  right: 1.5rem;
+  background: var(--surface2);
+  border: 1px solid rgba(0, 200, 83, 0.4);
+  color: var(--white);
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  z-index: 400;
+  transform: translateY(20px); /* Comienza desplazado hacia abajo */
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none; /* No interfiere con clics */
+}
+
+/* Al agregar clase "show" el toast aparece */
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Toast de éxito: borde verde */
+.toast.success {
+  border-color: rgba(32, 200, 100, 0.4);
+}
+
+/* Toast de error: borde rojo */
+.toast.error {
+  border-color: rgba(255, 32, 64, 0.4);
+}
+
+
+/* ================================================================
+   13. ANIMACIONES
+   Efectos de entrada para los elementos del hero y otros.
+   ================================================================ */
+
+/* Aparece desde arriba (usado en el badge) */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Aparece desde abajo (usado en textos del hero) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Aparece desde la derecha (usado en la foto del hero) */
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Aparece creciendo desde el centro (usado en modales) */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Parpadeo suave (usado en el punto del badge) */
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--blue); }
+  50%       { opacity: 0.5; box-shadow: 0 0 4px var(--blue); }
+}
+
+
+/* ================================================================
+   14. DISEÑO RESPONSIVE
+   Adapta el layout para pantallas pequeñas (tablets y celulares).
+   ================================================================ */
+
+/* Tablets y pantallas medianas (menos de 900px) */
+@media (max-width: 900px) {
+
+  /* Hero pasa a 1 columna (foto arriba, texto abajo) */
+  .hero-section {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  /* El texto del hero se centra */
+  .hero-text {
+    align-items: center;
+  }
+
+  /* La foto sube arriba del texto */
+  .hero-visual {
+    order: -1;
+  }
+
+  /* Foto más pequeña en móvil */
+  .profile-card {
+    width: 240px;
+  }
+
+  /* Sección Acerca: 1 columna */
+  .acerca-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Contacto: 1 columna */
+  .contacto-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Barra social flotante se oculta en móvil (ocupa demasiado espacio) */
+  .social-float {
+    display: none;
+  }
+}
+
+/* Celulares pequeños (menos de 600px) */
+@media (max-width: 600px) {
+
+  /* Menú más compacto */
+  nav ul {
+    gap: 0.1rem;
+  }
+
+  nav a {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  /* Logo más pequeño */
+  .logo {
+    font-size: 1.2rem;
+  }
+}

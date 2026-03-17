@@ -1,0 +1,2429 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elyver — Portafolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tourney:ital,wght@0,100..900;1,100..900&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+/* ================================================================
+   PORTAFOLIO — ELYVER
+   Archivo: estilos.css
+   Descripción: Todos los estilos visuales del portafolio.
+   Estructura:
+     1. Variables globales (colores, fuentes, tamaños)
+     2. Reset y base
+     3. Header y navegación
+     4. Sección Hero (inicio)
+     5. Sección Acerca
+     6. Sección Proyectos
+     7. Sección Servicios
+     8. Sección Contacto
+     9. Footer
+    10. Panel de administrador
+    11. Modales
+    12. Animaciones
+    13. Diseño responsive
+   ================================================================ */
+
+
+/* ================================================================
+   1. VARIABLES GLOBALES
+   Define todos los colores, fuentes y valores reutilizables.
+   Para cambiar el color principal del sitio, solo edita --blue aquí.
+   ================================================================ */
+:root {
+  /* Colores de fondo (de más oscuro a menos oscuro) */
+  --bg:       #060810;   /* Fondo principal muy oscuro */
+  --bg2:      #0c1020;   /* Fondo alternativo de secciones */
+  --surface:  #111827;   /* Fondo de tarjetas y elementos */
+  --surface2: #1a2235;   /* Fondo de modales y paneles */
+
+  /* Color de borde semitransparente con tono azul */
+  --border: rgba(0, 200, 83, 0.18);
+
+  /* Color azul principal y su versión con brillo (glow) */
+  --blue:      #00c853;
+  --blue-glow: rgba(0, 200, 83, 0.35);
+
+  /* Color rojo de acento y su versión con brillo */
+  --red:      #ff2040;
+  --red-glow: rgba(255, 32, 64, 0.35);
+
+  /* Colores de texto */
+  --white: #f0f4ff;   /* Texto principal casi blanco */
+  --muted: #7a8aaa;   /* Texto secundario grisáceo */
+
+  /* Familias de fuentes */
+  --font-display: "Tourney", sans-serif;    /* Para el logo y título hero */
+  --font-title:   "Bebas Neue", sans-serif; /* Para títulos de secciones y menú */
+  --font-body:    "DM Sans", sans-serif;    /* Para párrafos y textos generales */
+
+  /* Radio de borde para tarjetas y botones */
+  --radius: 14px;
+
+  /* Transición estándar para animaciones hover */
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ================================================================
+   2. RESET Y BASE
+   Elimina márgenes/paddings por defecto y define comportamientos
+   globales del documento.
+   ================================================================ */
+
+/* Aplica box-sizing: border-box a todos los elementos para que
+   el padding no afecte el tamaño total del elemento */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Activa el scroll suave al hacer clic en los enlaces del menú */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilos base del cuerpo de la página */
+body {
+  background: var(--bg);        /* Fondo oscuro */
+  color: var(--white);          /* Texto blanco por defecto */
+  font-family: var(--font-body);/* Fuente base para todo el sitio */
+  min-height: 100vh;            /* La página ocupa mínimo toda la pantalla */
+  overflow-x: hidden;           /* Evita scroll horizontal no deseado */
+}
+
+/* Capa de textura (ruido) superpuesta sobre toda la página
+   para dar profundidad visual. No interfiere con los clics. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0; /* Ocupa toda la pantalla */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; /* No bloquea los clics del usuario */
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* Las secciones necesitan z-index positivo para estar sobre la textura */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Línea divisora entre secciones */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* Espaciado interno estándar para todas las secciones */
+.section-pad {
+  padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+  /* clamp(mínimo, preferido, máximo) — se adapta al tamaño de pantalla */
+}
+
+/* Sección con fondo alternativo (más oscuro) */
+.seccion-oscura {
+  background: var(--bg2);
+}
+
+/* Espacio inferior del encabezado de cada sección */
+.section-header {
+  margin-bottom: 3rem;
+}
+
+/* Etiqueta pequeña arriba del título de sección (ej: "// Mi trabajo") */
+.section-tag {
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  color: var(--blue);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Título principal de cada sección */
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Palabra en rojo dentro del título de sección */
+.section-title .red {
+  color: var(--red);
+}
+
+
+/* ================================================================
+   3. HEADER Y NAVEGACIÓN
+   Barra superior fija que permanece visible al hacer scroll.
+   ================================================================ */
+
+/* Contenedor principal del header */
+header {
+  position: sticky;       /* Se queda pegado arriba al hacer scroll */
+  top: 0;
+  z-index: 100;           /* Siempre por encima del contenido */
+  background: rgba(6, 8, 16, 0.85); /* Fondo semitransparente */
+  backdrop-filter: blur(20px);      /* Efecto de vidrio esmerilado */
+  border-bottom: 1px solid var(--border);
+  padding: 0 clamp(1rem, 4vw, 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;           /* Altura fija del header */
+}
+
+/* Logo del portafolio (doble clic secreto activa el admin) */
+.logo {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--white);
+  text-shadow: 0 0 20px var(--blue-glow); /* Resplandor azul */
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+/* Nombre "ELYVER" en rojo debajo de "PORTAFOLIO" */
+.logo span {
+  font-family: var(--font-title);
+  font-size: 0.7em;
+  color: var(--red);
+  letter-spacing: 0.25em;
+  text-shadow: 0 0 10px var(--red-glow);
+}
+
+/* Lista del menú de navegación en fila horizontal */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0.2rem;
+}
+
+/* Cada enlace del menú */
+nav a {
+  text-decoration: none;
+  color: var(--muted);
+  font-family: var(--font-title);
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  transition: var(--transition);
+  position: relative; /* Necesario para el pseudo-elemento ::after */
+}
+
+/* Línea azul que aparece debajo del enlace al hacer hover */
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: var(--blue);
+  transform: scaleX(0);         /* Comienza invisible (escala 0) */
+  transition: var(--transition);
+  border-radius: 2px;
+}
+
+/* Efecto hover: texto blanco y fondo azul semitransparente */
+nav a:hover {
+  color: var(--white);
+  background: rgba(0, 200, 83, 0.1);
+}
+
+/* La línea debajo se expande al hacer hover */
+nav a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Estilo del enlace de la sección activa (sección visible actualmente) */
+nav a.active {
+  color: var(--red);
+  background: rgba(255, 32, 64, 0.08);
+}
+
+/* La línea del activo es roja y siempre visible */
+nav a.active::after {
+  transform: scaleX(1);
+  background: var(--red);
+}
+
+/* Contenedor de la esquina derecha del header */
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* Indicador "● ADMIN" que aparece solo en modo administrador */
+.admin-indicator {
+  display: none; /* Oculto por defecto */
+  background: rgba(255, 32, 64, 0.12);
+  border: 1px solid rgba(255, 32, 64, 0.3);
+  color: var(--red);
+  font-family: var(--font-title);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+}
+
+/* Cuando body tiene clase "admin-mode" (scripts.js), muestra el indicador */
+.admin-mode .admin-indicator {
+  display: block;
+}
+
+
+/* ================================================================
+   4. BARRA FLOTANTE DE REDES SOCIALES
+   Aparece fija en el lado izquierdo de la pantalla.
+   ================================================================ */
+.social-float {
+  position: fixed;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%); /* Centrado vertical exacto */
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 50;
+}
+
+/* Cada ícono de red social */
+.social-float a {
+  width: 40px;
+  height: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: var(--transition);
+  color: var(--muted);
+}
+
+/* Hover: se pone azul y se desplaza levemente a la derecha */
+.social-float a:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px var(--blue-glow);
+}
+
+
+/* ================================================================
+   5. SECCIÓN HERO — INICIO
+   Primera pantalla visible. Layout de 2 columnas.
+   ================================================================ */
+
+/* Layout en 2 columnas: texto a la izquierda, foto a la derecha */
+.hero-section {
+  min-height: calc(100vh - 64px); /* Ocupa toda la pantalla menos el header */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+  padding-left: clamp(4rem, 8vw, 7rem); /* Espacio extra izquierdo (barra social) */
+}
+
+/* Contenedor de la columna de texto */
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Badge "Disponible para proyectos" con punto parpadeante */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 200, 83, 0.12);
+  border: 1px solid rgba(0, 200, 83, 0.3);
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #69f0ae;
+  letter-spacing: 0.1em;
+  width: fit-content;
+  animation: fadeInDown 0.7s ease both; /* Aparece desde arriba al cargar */
+}
+
+/* Punto verde/azul parpadeante del badge */
+.hero-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background: var(--blue);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--blue);
+  animation: pulse 2s infinite; /* Parpadea constantemente */
+}
+
+/* Nombre grande "DISEÑADOR & DESARROLLADOR" */
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem); /* Tamaño fluido según pantalla */
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  animation: fadeInUp 0.7s 0.1s ease both;
+}
+
+/* Parte del nombre en azul con resplandor */
+.hero-name .accent {
+  color: var(--blue);
+  text-shadow: 0 0 40px var(--blue-glow);
+}
+
+/* Parte del nombre en rojo con resplandor */
+.hero-name .accent-red {
+  color: var(--red);
+  text-shadow: 0 0 40px var(--red-glow);
+}
+
+/* Subtítulo de especialidades */
+.hero-role {
+  font-family: var(--font-title);
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  animation: fadeInUp 0.7s 0.2s ease both;
+}
+
+/* Párrafo de descripción */
+.hero-desc {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 480px;
+  animation: fadeInUp 0.7s 0.3s ease both;
+}
+
+/* Contenedor de los botones de acción */
+.hero-ctas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.7s 0.4s ease both;
+}
+
+/* Botón principal (azul sólido) */
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 10px;
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: 0 4px 24px var(--blue-glow);
+  display: inline-block;
+}
+
+/* Hover: sube levemente y la sombra se intensifica */
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px var(--blue-glow);
+  background: #00e676;
+}
+
+/* Botón full width (para el formulario de contacto) */
+.btn-full {
+  width: 100%;
+}
+
+/* Botón secundario (borde transparente) */
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--border);
+  padding: 0.75rem 2rem;
+  border-radius: 10px;
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  display: inline-block;
+}
+
+/* Hover: borde y texto se vuelven azules */
+.btn-secondary:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  transform: translateY(-2px);
+}
+
+/* Columna de la foto de perfil: centrada */
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInRight 0.8s 0.2s ease both;
+}
+
+/* Tarjeta que contiene la foto (tiene borde degradado) */
+.profile-card {
+  position: relative;
+  width: 320px;
+}
+
+/* Borde degradado azul-rojo alrededor de la foto */
+.profile-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px; /* Sobresale 2px del contenedor */
+  background: linear-gradient(135deg, var(--blue), transparent 50%, var(--red));
+  border-radius: calc(var(--radius) + 2px);
+  z-index: -1;
+}
+
+/* Contenedor interno de la foto */
+.profile-img-wrap {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 3/4; /* Proporción 3:4 para foto de retrato */
+}
+
+/* La imagen de perfil llena todo el contenedor */
+.profile-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Recorta la imagen para llenar sin deformar */
+  display: block;
+}
+
+/* Placeholder con emoji si no carga la imagen */
+.profile-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--surface2), var(--bg2));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--muted);
+  font-size: 4rem;
+}
+
+/* Cuadrícula de 4 estadísticas debajo de la foto */
+.profile-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Cada chip de estadística */
+.stat-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  text-align: center;
+}
+
+/* Número grande en azul */
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+/* Texto descriptivo del número */
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+
+/* ================================================================
+   6. SECCIÓN ACERCA — CONÓCEME MÁS
+   Layout de 3 columnas: foto | texto + skills | tarjetas info.
+   ================================================================ */
+
+/* Sección con fondo alternativo */
+#acerca {
+  background: var(--bg2);
+}
+
+/* Cuadrícula de 3 columnas */
+.acerca-grid {
+  display: grid;
+  grid-template-columns: auto 1fr 1.2fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* Columna de la foto: centrada verticalmente */
+.acerca-foto-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Contenedor con posición relativa para el borde degradado */
+.acerca-foto-wrapper {
+  position: relative;
+}
+
+/* Capa del borde degradado azul-rojo */
+.acerca-foto-borde {
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--blue), transparent 50%, var(--red));
+  border-radius: calc(var(--radius) + 2px);
+  z-index: 0;
+}
+
+/* Contenedor de la imagen en la sección acerca */
+.acerca-foto-img {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  width: 220px;
+  height: 270px;
+}
+
+/* La imagen llena el contenedor sin deformarse */
+.acerca-foto-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder si no carga la imagen */
+.acerca-foto-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--surface2), var(--bg2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+}
+
+/* Texto de presentación personal */
+.about-text {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* Palabras destacadas dentro del texto bio */
+.about-text strong {
+  color: var(--white);
+}
+
+/* Contenedor de chips de habilidades */
+.skills-list {
+  display: flex;
+  flex-wrap: wrap; /* Se va a la siguiente línea si no caben */
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+/* Cada chip de habilidad (ej: "React", "Python") */
+.skill-tag {
+  background: rgba(0, 200, 83, 0.1);
+  border: 1px solid rgba(0, 200, 83, 0.25);
+  color: #69f0ae;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px; /* Borde completamente redondeado */
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+}
+
+/* Columna derecha con las 3 tarjetas de info (Enfoque, Metodología, Ubicación) */
+.acerca-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Tarjetas dentro de la sección acerca */
+.acerca-info-card {
+  padding: 1.25rem 1.5rem !important;
+}
+
+/* Título de cada tarjeta info */
+.acerca-card-titulo {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+
+
+/* ================================================================
+   7. SECCIÓN PROYECTOS
+   Cuadrícula de tarjetas generadas dinámicamente por scripts.js.
+   ================================================================ */
+
+/* Cabecera de la sección con título y botón de agregar */
+.proyectos-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Cuadrícula responsiva de tarjetas de proyectos */
+.proyectos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  /* auto-fill: crea tantas columnas como quepan de mínimo 300px */
+  gap: 1.5rem;
+}
+
+/* Tarjeta individual de proyecto */
+.proyecto-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+
+/* Hover: sube, borde azul y sombra profunda */
+.proyecto-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 200, 83, 0.5);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 200, 83, 0.2);
+}
+
+/* Contenedor de la imagen (con overflow hidden para el zoom) */
+.proyecto-img-wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Imagen del proyecto */
+.proyecto-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: var(--transition);
+}
+
+/* La imagen hace zoom al hacer hover en la tarjeta */
+.proyecto-card:hover img {
+  transform: scale(1.04);
+}
+
+/* Capa oscura que aparece sobre la imagen al hacer hover */
+.proyecto-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6, 8, 16, 0.9) 0%, transparent 60%);
+  opacity: 0;          /* Invisible por defecto */
+  transition: var(--transition);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.2rem;
+}
+
+/* La capa aparece al hacer hover */
+.proyecto-card:hover .proyecto-overlay {
+  opacity: 1;
+}
+
+/* Área de texto de la tarjeta */
+.proyecto-info {
+  padding: 1.2rem;
+}
+
+/* Nombre del proyecto */
+.proyecto-title {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+}
+
+/* Descripción breve del proyecto */
+.proyecto-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Fila de etiquetas de tecnologías */
+.proyecto-tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+/* Chip de tecnología (ej: "React", "SQL") */
+.proyecto-tag {
+  background: rgba(0, 200, 83, 0.12);
+  color: #69f0ae;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+
+/* Botones de editar/eliminar (solo visibles en modo admin) */
+.admin-card-actions {
+  display: none; /* Ocultos por defecto */
+  gap: 0.5rem;
+  padding: 0.75rem 1.2rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Se muestran cuando body tiene clase "admin-mode" */
+.admin-mode .admin-card-actions {
+  display: flex;
+}
+
+/* Estilo base de los botones Editar y Eliminar */
+.btn-edit, .btn-delete {
+  flex: 1;
+  padding: 0.4rem;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+/* Botón Editar: azul */
+.btn-edit {
+  background: rgba(0, 200, 83, 0.15);
+  color: #69f0ae;
+}
+.btn-edit:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* Botón Eliminar: rojo */
+.btn-delete {
+  background: rgba(255, 32, 64, 0.12);
+  color: #ff7a8a;
+}
+.btn-delete:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+
+/* ================================================================
+   8. SECCIÓN SERVICIOS
+   Cuadrícula de tarjetas con animación de línea superior.
+   ================================================================ */
+
+/* Fondo alternativo para la sección */
+#servicios {
+  background: var(--bg2);
+}
+
+/* Cuadrícula responsiva de tarjetas de servicios */
+.servicios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+/* Tarjeta individual de servicio */
+.servicio-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden; /* Necesario para ocultar la línea ::before */
+}
+
+/* Línea degradada azul-roja en la parte superior de la tarjeta */
+.servicio-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--red));
+  transform: scaleX(0);         /* Invisible por defecto */
+  transition: var(--transition);
+}
+
+/* La línea se expande al hacer hover */
+.servicio-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Hover: sube y agrega sombra */
+.servicio-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 200, 83, 0.3);
+}
+
+/* Emoji grande representativo del servicio */
+.srv-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Nombre del servicio */
+.srv-titulo {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+/* Descripción del servicio */
+.srv-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+
+/* ================================================================
+   9. SECCIÓN CONTACTO
+   Layout de 2 columnas: links de contacto | formulario.
+   ================================================================ */
+
+/* Layout de 2 columnas */
+.contacto-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* Título "¿Tienes un proyecto en mente?" */
+.contacto-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* Párrafo de introducción */
+.contacto-info p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+/* Columna vertical de links de contacto */
+.contacto-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Cada link de contacto (WhatsApp, Email, LinkedIn, GitHub) */
+.contacto-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  color: var(--white);
+  transition: var(--transition);
+}
+
+/* Hover: borde azul y desplazamiento a la derecha */
+.contacto-link:hover {
+  border-color: var(--blue);
+  background: rgba(0, 200, 83, 0.08);
+  transform: translateX(4px);
+}
+
+/* Emoji/ícono del link */
+.contacto-link-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0; /* No se reduce si hay poco espacio */
+}
+
+/* Contenedor del label y valor del link */
+.contacto-link-info {
+  flex: 1; /* Ocupa el espacio disponible */
+}
+
+/* Texto pequeño "WhatsApp", "Correo", etc. */
+.contacto-link-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Valor del contacto (número, email, URL) */
+.contacto-link-value {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  margin-top: 0.1rem;
+}
+
+/* Flecha "→" al final del link */
+.contacto-link-arrow {
+  color: var(--muted);
+  transition: var(--transition);
+}
+
+/* La flecha se pone azul y avanza al hacer hover */
+.contacto-link:hover .contacto-link-arrow {
+  color: var(--blue);
+  transform: translateX(3px);
+}
+
+/* Formulario de contacto */
+.contacto-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Grupo de campo: label + input/textarea */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* Etiqueta de cada campo */
+.form-group label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Estilo base de inputs y textareas */
+.form-group input,
+.form-group textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition);
+  resize: vertical; /* Solo permite redimensionar verticalmente */
+}
+
+/* Borde azul y sombra suave al hacer focus */
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
+}
+
+/* Altura mínima del textarea */
+.form-group textarea {
+  min-height: 120px;
+}
+
+
+/* ================================================================
+   10. FOOTER — PIE DE PÁGINA
+   ================================================================ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem clamp(1.5rem, 6vw, 5rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap; /* Se adapta si no caben en una línea */
+}
+
+/* Texto de copyright */
+.footer-copy {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* Fila de íconos de redes sociales en el footer */
+.footer-social {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Cada ícono del footer */
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1rem;
+  color: var(--muted);
+  transition: var(--transition);
+}
+
+/* Hover: fondo azul */
+.footer-social a:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+
+/* ================================================================
+   11. PANEL DE ADMINISTRADOR
+   Barra flotante en la parte inferior de la pantalla.
+   Solo visible cuando body tiene clase "admin-mode".
+   ================================================================ */
+
+/* Barra flotante del panel admin */
+.admin-bar {
+  display: none; /* Oculta por defecto */
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%); /* Centrado horizontal */
+  background: var(--surface2);
+  border: 1px solid rgba(0, 200, 83, 0.4);
+  border-radius: 999px;
+  padding: 0.6rem 1.5rem;
+  gap: 1rem;
+  align-items: center;
+  z-index: 200;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 200, 83, 0.15);
+  backdrop-filter: blur(16px);
+}
+
+/* Se muestra cuando body tiene clase "admin-mode" */
+.admin-mode .admin-bar {
+  display: flex;
+}
+
+/* Texto "⚙ MODO ADMIN" de la barra */
+.admin-bar-label {
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  color: var(--blue);
+}
+
+/* Contenedor de los botones de acción del admin */
+.admin-bar-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* Botones de acción del admin (Editar, Agregar) */
+.btn-admin-action {
+  background: rgba(0, 200, 83, 0.15);
+  border: 1px solid rgba(0, 200, 83, 0.3);
+  color: #69f0ae;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-admin-action:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+/* Botón "✕ Salir" del modo admin */
+.btn-admin-exit {
+  background: rgba(255, 32, 64, 0.12);
+  border: 1px solid rgba(255, 32, 64, 0.25);
+  color: #ff7a8a;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-admin-exit:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+
+/* ================================================================
+   12. MODALES — VENTANAS EMERGENTES
+   Fondo oscuro que cubre toda la pantalla + ventana centrada.
+   ================================================================ */
+
+/* Capa de fondo oscuro del modal */
+.modal-overlay {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px); /* Desenfoca el fondo */
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Cuando tiene clase "open" se vuelve visible y centra el contenido */
+.modal-overlay.open {
+  display: flex;
+}
+
+/* Ventana del modal */
+.modal {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;         /* Scroll interno si hay mucho contenido */
+  animation: scaleIn 0.25s ease; /* Aparece con animación de escala */
+}
+
+/* Título del modal */
+.modal h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* Espaciado entre campos del formulario dentro del modal */
+.modal .form-group {
+  margin-bottom: 0.75rem;
+}
+
+/* Fila de botones al final del modal */
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+}
+
+/* Botón guardar/confirmar */
+.btn-save {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-save:hover {
+  background: #00e676;
+}
+
+/* Botón cancelar */
+.btn-cancel {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-cancel:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* Modal de login: más pequeño y centrado */
+.login-modal {
+  max-width: 380px;
+  text-align: center;
+}
+.login-modal .form-group {
+  text-align: left;
+}
+
+/* Texto de ayuda dentro del modal */
+.login-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* Notificación flotante (toast) para confirmaciones */
+.toast {
+  position: fixed;
+  bottom: 5rem;
+  right: 1.5rem;
+  background: var(--surface2);
+  border: 1px solid rgba(0, 200, 83, 0.4);
+  color: var(--white);
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  z-index: 400;
+  transform: translateY(20px); /* Comienza desplazado hacia abajo */
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none; /* No interfiere con clics */
+}
+
+/* Al agregar clase "show" el toast aparece */
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Toast de éxito: borde verde */
+.toast.success {
+  border-color: rgba(32, 200, 100, 0.4);
+}
+
+/* Toast de error: borde rojo */
+.toast.error {
+  border-color: rgba(255, 32, 64, 0.4);
+}
+
+
+/* ================================================================
+   13. ANIMACIONES
+   Efectos de entrada para los elementos del hero y otros.
+   ================================================================ */
+
+/* Aparece desde arriba (usado en el badge) */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Aparece desde abajo (usado en textos del hero) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Aparece desde la derecha (usado en la foto del hero) */
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Aparece creciendo desde el centro (usado en modales) */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Parpadeo suave (usado en el punto del badge) */
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--blue); }
+  50%       { opacity: 0.5; box-shadow: 0 0 4px var(--blue); }
+}
+
+
+/* ================================================================
+   14. DISEÑO RESPONSIVE
+   Adapta el layout para pantallas pequeñas (tablets y celulares).
+   ================================================================ */
+
+/* Tablets y pantallas medianas (menos de 900px) */
+@media (max-width: 900px) {
+
+  /* Hero pasa a 1 columna (foto arriba, texto abajo) */
+  .hero-section {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  /* El texto del hero se centra */
+  .hero-text {
+    align-items: center;
+  }
+
+  /* La foto sube arriba del texto */
+  .hero-visual {
+    order: -1;
+  }
+
+  /* Foto más pequeña en móvil */
+  .profile-card {
+    width: 240px;
+  }
+
+  /* Sección Acerca: 1 columna */
+  .acerca-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Contacto: 1 columna */
+  .contacto-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Barra social flotante se oculta en móvil (ocupa demasiado espacio) */
+  .social-float {
+    display: none;
+  }
+}
+
+/* Celulares pequeños (menos de 600px) */
+@media (max-width: 600px) {
+
+  /* Menú más compacto */
+  nav ul {
+    gap: 0.1rem;
+  }
+
+  nav a {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  /* Logo más pequeño */
+  .logo {
+    font-size: 1.2rem;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+<!-- BARRA FLOTANTE DE REDES SOCIALES -->
+<aside class="social-float" aria-label="Redes sociales">
+  <a href="#" title="WhatsApp" target="_blank" id="sf-whatsapp">💬</a>
+  <a href="#" title="LinkedIn" target="_blank" id="sf-linkedin">💼</a>
+  <a href="#" title="GitHub" target="_blank" id="sf-github">🐙</a>
+  <a href="#" title="Instagram" target="_blank" id="sf-instagram">📸</a>
+</aside>
+
+<!-- HEADER -->
+<header>
+  <a href="#inicio" class="logo" id="logo-secret">PORTAFOLIO <span>ELYVER</span></a>
+  <nav aria-label="Secciones principales">
+    <ul>
+      <li><a href="#inicio" class="active">INICIO</a></li>
+      <li><a href="#acerca">ACERCA</a></li>
+      <li><a href="#proyectos">PROYECTOS</a></li>
+      <li><a href="#servicios">SERVICIOS</a></li>
+      <li><a href="#contacto">CONTACTO</a></li>
+    </ul>
+  </nav>
+  <div class="header-actions">
+    <span class="admin-indicator">● ADMIN</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="inicio" class="section-pad hero-section">
+  <div class="hero-text">
+    <span class="hero-badge">Disponible para proyectos</span>
+    <h2 class="hero-name">
+      DISEÑADOR<br>
+      <span class="accent">& DESA</span><span class="accent-red">RRO</span>LLADOR
+    </h2>
+    <p class="hero-role">SOFTWARE · UI/UX · WEB · MÓVIL</p>
+    <p class="hero-desc" id="hero-desc">
+      Creo soluciones digitales funcionales, intuitivas y visualmente atractivas.
+      Combino creatividad y lógica para transformar ideas en productos digitales modernos y competitivos.
+    </p>
+    <div class="hero-ctas">
+      <a href="#proyectos" class="btn-primary">Ver Proyectos</a>
+      <a href="#contacto" class="btn-secondary">Contáctame</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div>
+      <div class="profile-card">
+        <div class="profile-img-wrap">
+          <img src="Elyver.jpeg" alt="Elyver"
+            onerror="this.parentElement.innerHTML=\'<div class=\"profile-img-placeholder\">👨‍💻<span>ELYVER</span></div>\'">
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-chip"><div class="stat-num" id="stat-proyectos">6+</div><div class="stat-label">Proyectos</div></div>
+        <div class="stat-chip"><div class="stat-num" id="stat-exp">2+</div><div class="stat-label">Años exp.</div></div>
+        <div class="stat-chip"><div class="stat-num" id="stat-clientes">10+</div><div class="stat-label">Clientes</div></div>
+        <div class="stat-chip"><div class="stat-num" id="stat-tech">8+</div><div class="stat-label">Tecnologías</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ACERCA -->
+<section id="acerca" class="section-pad" style="background:var(--bg2);">
+  <div class="section-header">
+    <span class="section-tag">// Sobre mí</span>
+    <h2 class="section-title">CONÓCEME <span class="red">MÁS</span></h2>
+  </div>
+  <div class="acerca-grid">
+    <!-- Foto -->
+    <div class="acerca-foto-col">
+      <div class="acerca-foto-wrapper">
+        <div class="acerca-foto-borde"></div>
+        <div class="acerca-foto-img">
+          <img src="Elyver.jpeg" alt="Elyver"
+            onerror="this.parentElement.innerHTML=\'<div class=\"acerca-foto-placeholder\">👨‍💻</div>\'">
+        </div>
+      </div>
+    </div>
+    <!-- Bio y skills -->
+    <div>
+      <p class="about-text" id="about-text">
+        Mi nombre es <strong>ELYVER</strong>, tengo <strong>24 años</strong> y soy un apasionado desarrollador de software.
+        Me especializo en crear soluciones digitales funcionales, intuitivas y visualmente atractivas.
+        Mi enfoque se centra en el diseño de interfaces centradas en el usuario <strong>(UI/UX)</strong> y el
+        desarrollo de aplicaciones web y móviles.<br><br>
+        Trabajo con metodologías ágiles, priorizando la calidad del código, la experiencia del usuario y el
+        cumplimiento de los objetivos del negocio.
+      </p>
+      <div class="skills-list" id="skills-list">
+        <span class="skill-tag">HTML / CSS</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Flutter</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">UI/UX Design</span>
+        <span class="skill-tag">Figma</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">Git</span>
+      </div>
+    </div>
+    <!-- Tarjetas info -->
+    <div class="acerca-cards-col">
+      <div class="servicio-card acerca-info-card">
+        <div class="acerca-card-titulo">🎯 Enfoque</div>
+        <p class="srv-desc">Desarrollo centrado en el usuario, código limpio y resultados medibles.</p>
+      </div>
+      <div class="servicio-card acerca-info-card">
+        <div class="acerca-card-titulo">⚡ Metodología</div>
+        <p class="srv-desc">Agile/Scrum, iteración rápida, comunicación constante con el cliente.</p>
+      </div>
+      <div class="servicio-card acerca-info-card">
+        <div class="acerca-card-titulo">🌎 Ubicación</div>
+        <p class="srv-desc" id="about-ubicacion">Pimentel, Chiclayo, Perú — Disponible remotamente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROYECTOS -->
+<section id="proyectos" class="section-pad">
+  <div class="section-header proyectos-header">
+    <div>
+      <span class="section-tag">// Mi trabajo</span>
+      <h2 class="section-title">PROYECTOS <span class="red">DESTACADOS</span></h2>
+    </div>
+    <button class="btn-admin-action" id="btn-add-project" style="display:none;" onclick="openAddProject()">+ Agregar Proyecto</button>
+  </div>
+  <div class="proyectos-grid" id="proyectos-grid"></div>
+</section>
+
+<hr class="divider">
+
+<!-- SERVICIOS -->
+<section id="servicios" class="section-pad" style="background:var(--bg2);">
+  <div class="section-header">
+    <span class="section-tag">// Lo que ofrezco</span>
+    <h2 class="section-title">MIS <span class="red">SERVICIOS</span></h2>
+  </div>
+  <div class="servicios-grid" id="servicios-grid"></div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACTO -->
+<section id="contacto" class="section-pad">
+  <div class="section-header">
+    <span class="section-tag">// Hablemos</span>
+    <h2 class="section-title">PONTE EN <span class="red">CONTACTO</span></h2>
+  </div>
+  <div class="contacto-layout">
+    <div class="contacto-info">
+      <h3>¿Tienes un proyecto en mente?</h3>
+      <p>Estoy disponible para consultas, desarrollo de proyectos, colaboraciones y asesorías tecnológicas. Convirtamos tu idea en una solución digital profesional.</p>
+      <div class="contacto-links" id="contacto-links">
+        <a href="#" class="contacto-link" id="link-whatsapp">
+          <span class="contacto-link-icon">💬</span>
+          <div class="contacto-link-info">
+            <div class="contacto-link-label">WhatsApp</div>
+            <div class="contacto-link-value" id="val-whatsapp">+51 XXX XXX XXX</div>
+          </div>
+          <span class="contacto-link-arrow">→</span>
+        </a>
+        <a href="#" class="contacto-link" id="link-email">
+          <span class="contacto-link-icon">📧</span>
+          <div class="contacto-link-info">
+            <div class="contacto-link-label">Correo Electrónico</div>
+            <div class="contacto-link-value" id="val-email">tu@email.com</div>
+          </div>
+          <span class="contacto-link-arrow">→</span>
+        </a>
+        <a href="#" class="contacto-link" id="link-linkedin">
+          <span class="contacto-link-icon">💼</span>
+          <div class="contacto-link-info">
+            <div class="contacto-link-label">LinkedIn</div>
+            <div class="contacto-link-value" id="val-linkedin">linkedin.com/in/elyver</div>
+          </div>
+          <span class="contacto-link-arrow">→</span>
+        </a>
+        <a href="#" class="contacto-link" id="link-github">
+          <span class="contacto-link-icon">🐙</span>
+          <div class="contacto-link-info">
+            <div class="contacto-link-label">GitHub</div>
+            <div class="contacto-link-value" id="val-github">github.com/elyver</div>
+          </div>
+          <span class="contacto-link-arrow">→</span>
+        </a>
+      </div>
+    </div>
+    <div>
+      <div class="contacto-form">
+        <div class="form-group"><label>Nombre</label><input type="text" placeholder="Tu nombre completo"></div>
+        <div class="form-group"><label>Correo</label><input type="email" placeholder="tu@correo.com"></div>
+        <div class="form-group"><label>Asunto</label><input type="text" placeholder="¿En qué te puedo ayudar?"></div>
+        <div class="form-group"><label>Mensaje</label><textarea placeholder="Cuéntame sobre tu proyecto..."></textarea></div>
+        <button class="btn-primary btn-full" onclick="showToast(\'Mensaje enviado. Te responderé pronto 🚀\',\'success\')">Enviar Mensaje</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-copy">© 2025 <strong>ELYVER</strong> — Todos los derechos reservados.</p>
+  <div class="footer-social">
+    <a href="#" id="fs-whatsapp" title="WhatsApp">💬</a>
+    <a href="#" id="fs-linkedin" title="LinkedIn">💼</a>
+    <a href="#" id="fs-github" title="GitHub">🐙</a>
+    <a href="#" id="fs-instagram" title="Instagram">📸</a>
+  </div>
+</footer>
+
+<!-- ADMIN BAR -->
+<div class="admin-bar">
+  <span class="admin-bar-label">⚙ MODO ADMIN</span>
+  <div class="admin-bar-actions">
+    <button class="btn-admin-action" onclick="openEditContact()">✏ Contacto & Redes</button>
+    <button class="btn-admin-action" onclick="openEditAbout()">✏ Información personal</button>
+    <button class="btn-admin-action" onclick="openAddProject()">+ Proyecto</button>
+  </div>
+  <button class="btn-admin-exit" onclick="exitAdmin()">✕ Salir</button>
+</div>
+
+<!-- MODAL LOGIN -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal login-modal">
+    <h2>⚙ Acceso Admin</h2>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="admin-pass" placeholder="Ingresa la contraseña" onkeydown="if(event.key===\'Enter\') tryLogin()">
+    </div>
+    <p class="login-hint">Panel de administración.</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal(\'modal-login\')">Cancelar</button>
+      <button class="btn-save" onclick="tryLogin()">Ingresar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROYECTO -->
+<div class="modal-overlay" id="modal-proyecto">
+  <div class="modal">
+    <h2 id="modal-proyecto-title">Agregar Proyecto</h2>
+    <input type="hidden" id="edit-proyecto-idx" value="-1">
+    <div class="form-group"><label>Título</label><input type="text" id="p-titulo" placeholder="Nombre del proyecto"></div>
+    <div class="form-group"><label>Descripción</label><textarea id="p-desc" placeholder="Descripción breve..."></textarea></div>
+    <div class="form-group"><label>URL de Imagen</label><input type="text" id="p-img" placeholder="https://... o nombre de archivo"></div>
+    <div class="form-group"><label>Etiquetas (separadas por coma)</label><input type="text" id="p-tags" placeholder="React, Firebase, UI/UX"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal(\'modal-proyecto\')">Cancelar</button>
+      <button class="btn-save" onclick="saveProject()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONTACTO -->
+<div class="modal-overlay" id="modal-contact">
+  <div class="modal">
+    <h2>✏ Contacto & Redes Sociales</h2>
+    <div class="form-group"><label>WhatsApp</label><input type="text" id="c-whatsapp" placeholder="+51 999 999 999"></div>
+    <div class="form-group"><label>Correo Electrónico</label><input type="email" id="c-email" placeholder="tu@email.com"></div>
+    <div class="form-group"><label>LinkedIn (URL)</label><input type="text" id="c-linkedin" placeholder="https://linkedin.com/in/usuario"></div>
+    <div class="form-group"><label>GitHub (URL)</label><input type="text" id="c-github" placeholder="https://github.com/usuario"></div>
+    <div class="form-group"><label>Instagram (URL)</label><input type="text" id="c-instagram" placeholder="https://instagram.com/usuario"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal(\'modal-contact\')">Cancelar</button>
+      <button class="btn-save" onclick="saveContact()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INFO PERSONAL -->
+<div class="modal-overlay" id="modal-about">
+  <div class="modal">
+    <h2>✏ Información Personal</h2>
+    <div class="form-group"><label>Descripción hero</label><textarea id="a-herodesc"></textarea></div>
+    <div class="form-group"><label>Texto Acerca de mí</label><textarea id="a-about"></textarea></div>
+    <div class="form-group"><label>Ubicación</label><input type="text" id="a-ubicacion" placeholder="Ciudad, País"></div>
+    <div class="form-group"><label>Habilidades (separadas por coma)</label><input type="text" id="a-skills" placeholder="HTML, CSS, JavaScript..."></div>
+    <div class="form-group"><label>Estadística — Proyectos</label><input type="text" id="a-stat-p" placeholder="6+"></div>
+    <div class="form-group"><label>Estadística — Años exp.</label><input type="text" id="a-stat-e" placeholder="2+"></div>
+    <div class="form-group"><label>Estadística — Clientes</label><input type="text" id="a-stat-c" placeholder="10+"></div>
+    <div class="form-group"><label>Estadística — Tecnologías</label><input type="text" id="a-stat-t" placeholder="8+"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal(\'modal-about\')">Cancelar</button>
+      <button class="btn-save" onclick="saveAbout()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================================================================
+   PORTAFOLIO — ELYVER
+   Archivo: scripts.js
+   Descripción: Toda la lógica e interactividad del portafolio.
+   Estructura:
+     1. Estado global (datos y configuración)
+     2. Funciones de renderizado (dibujan el contenido en pantalla)
+     3. Sistema de administrador (login y sesión)
+     4. Helpers de modales (abrir y cerrar ventanas)
+     5. CRUD de proyectos (crear, leer, actualizar, eliminar)
+     6. Edición de contacto y redes sociales
+     7. Edición de información personal
+     8. Notificaciones toast
+     9. Navegación activa (resalta el menú al hacer scroll)
+    10. Acceso secreto al admin (3 clics en el logo)
+    11. Inicialización (ejecuta todo al cargar la página)
+   ================================================================ */
+
+
+/* ================================================================
+   1. ESTADO GLOBAL
+   Objeto central que almacena todos los datos del portafolio.
+   Cualquier cambio en el admin modifica este objeto y luego
+   se vuelve a renderizar la sección correspondiente.
+   ================================================================ */
+let state = {
+
+  /* Indica si el modo administrador está activo */
+  isAdmin: false,
+
+  /* Contraseña del panel de administrador */
+  adminPass: 'Ef@73887067',
+
+  /* Datos de contacto y redes sociales */
+  contact: {
+    whatsapp:    '+51 XXX XXX XXX',  /* Número visible en pantalla */
+    whatsappUrl: '#',                 /* URL para abrir WhatsApp (wa.me/...) */
+    email:       'tu@email.com',
+    linkedin:    'linkedin.com/in/elyver',  /* Texto visible */
+    linkedinUrl: '#',                        /* URL completa */
+    github:      'github.com/elyver',
+    githubUrl:   '#',
+    instagram:   '#'                  /* URL completa de Instagram */
+  },
+
+  /* Lista de proyectos mostrados en la sección "Proyectos" */
+  proyectos: [
+    {
+      titulo: 'Portal de Salud',
+      desc:   'Tu fuente de información médica. Síntomas, tratamientos y consejos.',
+      img:    '1Salud.png',
+      tags:   ['Salud', 'Web', 'UI/UX']
+    },
+    {
+      titulo: 'Aventura Épica',
+      desc:   'Juego web RPG. Elige tu misión, lucha y gana recompensas.',
+      img:    '2Juego_web.png',
+      tags:   ['Game', 'JavaScript', 'Canvas']
+    },
+    {
+      titulo: 'Sistema de Base de Datos',
+      desc:   'Gestión y análisis de datos. Administra y visualiza tu información.',
+      img:    '3Base_de_Datos.png',
+      tags:   ['SQL', 'Backend', 'Data']
+    },
+    {
+      titulo: 'Calculadora Científica',
+      desc:   'Herramienta avanzada de cálculo con funciones científicas y gráficas.',
+      img:    '4Calculadora_web.png',
+      tags:   ['Web', 'Math', 'JavaScript']
+    },
+    {
+      titulo: 'Diseños Web Modernos',
+      desc:   'Soluciones creativas para tu sitio. Elegantes y funcionales.',
+      img:    '5Web_Modernas.png',
+      tags:   ['CSS', 'Diseño', 'Responsive']
+    },
+    {
+      titulo: 'App Móvil',
+      desc:   'Todo en tu mano. Accede a tus funciones favoritas desde cualquier dispositivo.',
+      img:    '6App_Móvil.png',
+      tags:   ['Flutter', 'Móvil', 'UX']
+    }
+  ],
+
+  /* Lista de servicios mostrados en la sección "Servicios" */
+  servicios: [
+    { emoji: '🌐', titulo: 'Desarrollo Web y Móvil',    desc: 'Aplicaciones web y móviles modernas, rápidas y responsivas.' },
+    { emoji: '🎨', titulo: 'Diseño UI/UX',              desc: 'Interfaces intuitivas y atractivas centradas en el usuario.' },
+    { emoji: '🗄️', titulo: 'Sistemas y Bases de Datos', desc: 'Sistemas personalizados con bases de datos eficientes y seguras.' },
+    { emoji: '⚡', titulo: 'Optimización de Software',  desc: 'Mejora y optimización de aplicaciones y sistemas existentes.' },
+    { emoji: '💡', titulo: 'Asesoría Tecnológica',      desc: 'Planificación y consultoría para proyectos digitales.' },
+    { emoji: '🖥️', titulo: 'Páginas Web Responsivas',   desc: 'Sitios web modernos, elegantes y adaptables a cualquier dispositivo.' }
+  ]
+};
+
+
+/* ================================================================
+   2. FUNCIONES DE RENDERIZADO
+   Generan el HTML de cada sección a partir del estado (state).
+   Se llaman al iniciar la página y cada vez que hay un cambio.
+   ================================================================ */
+
+/**
+ * renderProyectos()
+ * Dibuja las tarjetas de proyectos en la cuadrícula.
+ * Incluye botones de editar/eliminar (visibles solo en modo admin).
+ */
+function renderProyectos() {
+  /* Obtiene el contenedor de la cuadrícula */
+  const grid = document.getElementById('proyectos-grid');
+
+  /* Genera el HTML de cada tarjeta usando map() y los une con join('') */
+  grid.innerHTML = state.proyectos.map((proyecto, indice) => `
+    <div class="proyecto-card">
+
+      <!-- Imagen con overlay que aparece al hacer hover -->
+      <div class="proyecto-img-wrap">
+        <img
+          src="${proyecto.img}"
+          alt="${proyecto.titulo}"
+          onerror="this.src=''; this.style.display='none'"
+        >
+        <!-- Overlay oscuro con el título del proyecto -->
+        <div class="proyecto-overlay">
+          <div style="font-family:var(--font-title); letter-spacing:0.08em;">
+            ${proyecto.titulo}
+          </div>
+        </div>
+      </div>
+
+      <!-- Información del proyecto -->
+      <div class="proyecto-info">
+        <div class="proyecto-title">${proyecto.titulo}</div>
+        <div class="proyecto-desc">${proyecto.desc}</div>
+        <!-- Chips de tecnologías usadas -->
+        <div class="proyecto-tags">
+          ${proyecto.tags.map(tag => `<span class="proyecto-tag">${tag}</span>`).join('')}
+        </div>
+      </div>
+
+      <!-- Botones admin (ocultos hasta activar modo admin) -->
+      <div class="admin-card-actions">
+        <button class="btn-edit"   onclick="openEditProject(${indice})">✏ Editar</button>
+        <button class="btn-delete" onclick="deleteProject(${indice})">✕ Eliminar</button>
+      </div>
+
+    </div>
+  `).join('');
+}
+
+
+/**
+ * renderServicios()
+ * Dibuja las tarjetas de servicios en la cuadrícula.
+ */
+function renderServicios() {
+  document.getElementById('servicios-grid').innerHTML = state.servicios.map(servicio => `
+    <div class="servicio-card">
+      <span class="srv-emoji">${servicio.emoji}</span>
+      <p class="srv-titulo">${servicio.titulo}</p>
+      <p class="srv-desc">${servicio.desc}</p>
+    </div>
+  `).join('');
+}
+
+
+/**
+ * renderContact()
+ * Actualiza los textos y enlaces de la sección de contacto,
+ * la barra flotante lateral y los íconos del footer.
+ */
+function renderContact() {
+  const c = state.contact;
+
+  /* Actualiza los textos visibles */
+  document.getElementById('val-whatsapp').textContent = c.whatsapp;
+  document.getElementById('val-email').textContent    = c.email;
+  document.getElementById('val-linkedin').textContent = c.linkedin;
+  document.getElementById('val-github').textContent   = c.github;
+
+  /* Actualiza los href de los links de la sección contacto */
+  /* Si hay número de WhatsApp, genera el link wa.me/NUMERO */
+  document.getElementById('link-whatsapp').href =
+    c.whatsappUrl !== '#'
+      ? `https://wa.me/${c.whatsappUrl.replace(/\D/g, '')}` /* Elimina caracteres no numéricos */
+      : '#';
+  document.getElementById('link-email').href    = `mailto:${c.email}`;
+  document.getElementById('link-linkedin').href = c.linkedinUrl;
+  document.getElementById('link-github').href   = c.githubUrl;
+
+  /* Actualiza los links de la barra social flotante Y del footer
+     Los prefijos 'sf' = social float, 'fs' = footer social */
+  ['sf', 'fs'].forEach(function(prefijo) {
+    const whatsapp  = document.getElementById(`${prefijo}-whatsapp`);
+    const linkedin  = document.getElementById(`${prefijo}-linkedin`);
+    const github    = document.getElementById(`${prefijo}-github`);
+    const instagram = document.getElementById(`${prefijo}-instagram`);
+
+    if (whatsapp)  whatsapp.href  = c.whatsappUrl !== '#' ? `https://wa.me/${c.whatsappUrl.replace(/\D/g, '')}` : '#';
+    if (linkedin)  linkedin.href  = c.linkedinUrl;
+    if (github)    github.href    = c.githubUrl;
+    if (instagram) instagram.href = c.instagram;
+  });
+}
+
+
+/* ================================================================
+   3. SISTEMA DE ADMINISTRADOR
+   Maneja el login, activación y salida del modo admin.
+   ================================================================ */
+
+/**
+ * openLogin()
+ * Abre el modal de login del administrador.
+ * Si ya está en modo admin, llama a exitAdmin() para cerrar sesión.
+ */
+function openLogin() {
+  if (state.isAdmin) {
+    /* Si ya es admin, hace logout directamente */
+    exitAdmin();
+    return;
+  }
+  /* Limpia el campo de contraseña antes de abrir */
+  document.getElementById('admin-pass').value = '';
+  openModal('modal-login');
+
+  /* Pone el cursor en el campo de contraseña automáticamente */
+  setTimeout(function() {
+    document.getElementById('admin-pass').focus();
+  }, 100);
+}
+
+
+/**
+ * tryLogin()
+ * Verifica la contraseña ingresada.
+ * Si es correcta activa el modo admin; si no, muestra error.
+ */
+function tryLogin() {
+  const contrasenaIngresada = document.getElementById('admin-pass').value;
+
+  if (contrasenaIngresada === state.adminPass) {
+    /* Contraseña correcta: activa modo admin */
+    state.isAdmin = true;
+
+    /* Agrega la clase "admin-mode" al body para mostrar elementos admin (CSS) */
+    document.body.classList.add('admin-mode');
+
+    /* Muestra el botón "Agregar Proyecto" en la sección de proyectos */
+    document.getElementById('btn-add-project').style.display = 'inline-block';
+
+    closeModal('modal-login');
+    showToast('Bienvenido al panel de administrador ✓', 'success');
+
+  } else {
+    /* Contraseña incorrecta: muestra error y limpia el campo */
+    showToast('Contraseña incorrecta', 'error');
+    document.getElementById('admin-pass').value = '';
+    document.getElementById('admin-pass').focus();
+  }
+}
+
+
+/**
+ * exitAdmin()
+ * Desactiva el modo administrador y oculta los controles de edición.
+ */
+function exitAdmin() {
+  state.isAdmin = false;
+
+  /* Quita la clase "admin-mode" del body (CSS oculta los controles) */
+  document.body.classList.remove('admin-mode');
+
+  /* Oculta el botón "Agregar Proyecto" */
+  document.getElementById('btn-add-project').style.display = 'none';
+
+  showToast('Modo administrador desactivado');
+}
+
+
+/* ================================================================
+   4. HELPERS DE MODALES
+   Funciones simples para abrir y cerrar las ventanas emergentes.
+   ================================================================ */
+
+/**
+ * openModal(id)
+ * Agrega la clase "open" al overlay del modal para mostrarlo.
+ * @param {string} id - El id del elemento modal-overlay en el HTML.
+ */
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+
+
+/**
+ * closeModal(id)
+ * Quita la clase "open" para ocultar el modal.
+ * @param {string} id - El id del elemento modal-overlay en el HTML.
+ */
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+
+/* Cierra cualquier modal al hacer clic en el fondo oscuro (fuera de la ventana) */
+document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+  overlay.addEventListener('click', function(evento) {
+    /* Solo cierra si el clic fue directamente en el overlay, no en la ventana */
+    if (evento.target === overlay) {
+      overlay.classList.remove('open');
+    }
+  });
+});
+
+
+/* ================================================================
+   5. CRUD DE PROYECTOS
+   Funciones para Crear, Leer, Actualizar y Eliminar proyectos.
+   ================================================================ */
+
+/**
+ * openAddProject()
+ * Abre el modal de proyecto en modo "Agregar" (campos vacíos).
+ */
+function openAddProject() {
+  /* Cambia el título del modal a "Agregar Proyecto" */
+  document.getElementById('modal-proyecto-title').textContent = 'Agregar Proyecto';
+
+  /* El índice -1 indica que es un proyecto nuevo (no edición) */
+  document.getElementById('edit-proyecto-idx').value = -1;
+
+  /* Limpia todos los campos del formulario */
+  document.getElementById('p-titulo').value = '';
+  document.getElementById('p-desc').value   = '';
+  document.getElementById('p-img').value    = '';
+  document.getElementById('p-tags').value   = '';
+
+  openModal('modal-proyecto');
+}
+
+
+/**
+ * openEditProject(indice)
+ * Abre el modal de proyecto en modo "Editar" con los datos existentes.
+ * @param {number} indice - Posición del proyecto en state.proyectos[].
+ */
+function openEditProject(indice) {
+  const proyecto = state.proyectos[indice];
+
+  /* Cambia el título del modal a "Editar Proyecto" */
+  document.getElementById('modal-proyecto-title').textContent = 'Editar Proyecto';
+
+  /* Guarda el índice para saber cuál proyecto actualizar al guardar */
+  document.getElementById('edit-proyecto-idx').value = indice;
+
+  /* Rellena los campos con los datos actuales del proyecto */
+  document.getElementById('p-titulo').value = proyecto.titulo;
+  document.getElementById('p-desc').value   = proyecto.desc;
+  document.getElementById('p-img').value    = proyecto.img;
+  document.getElementById('p-tags').value   = proyecto.tags.join(', '); /* Array → "tag1, tag2" */
+
+  openModal('modal-proyecto');
+}
+
+
+/**
+ * saveProject()
+ * Guarda un proyecto nuevo o actualiza uno existente.
+ * Lee los valores del formulario del modal y actualiza state.proyectos[].
+ */
+function saveProject() {
+  /* Lee el índice: -1 = nuevo proyecto, otro número = edición */
+  const indice = parseInt(document.getElementById('edit-proyecto-idx').value);
+
+  /* Construye el objeto proyecto con los datos del formulario */
+  const proyecto = {
+    titulo: document.getElementById('p-titulo').value.trim(),
+    desc:   document.getElementById('p-desc').value.trim(),
+    img:    document.getElementById('p-img').value.trim(),
+    /* Convierte "tag1, tag2, tag3" en el array ["tag1", "tag2", "tag3"] */
+    tags: document.getElementById('p-tags').value
+      .split(',')
+      .map(function(t) { return t.trim(); })
+      .filter(Boolean) /* Elimina strings vacíos */
+  };
+
+  /* Validación: el título es obligatorio */
+  if (!proyecto.titulo) {
+    showToast('El título es requerido', 'error');
+    return;
+  }
+
+  if (indice === -1) {
+    /* Proyecto nuevo: agrega al final del array */
+    state.proyectos.push(proyecto);
+  } else {
+    /* Edición: reemplaza el proyecto en la posición dada */
+    state.proyectos[indice] = proyecto;
+  }
+
+  /* Vuelve a dibujar la cuadrícula de proyectos */
+  renderProyectos();
+  closeModal('modal-proyecto');
+  showToast('Proyecto guardado ✓', 'success');
+}
+
+
+/**
+ * deleteProject(indice)
+ * Elimina un proyecto del array después de confirmación del usuario.
+ * @param {number} indice - Posición del proyecto en state.proyectos[].
+ */
+function deleteProject(indice) {
+  /* Pide confirmación antes de eliminar */
+  const confirmado = confirm(`¿Eliminar "${state.proyectos[indice].titulo}"?`);
+  if (!confirmado) return;
+
+  /* splice(indice, 1) elimina 1 elemento en la posición dada */
+  state.proyectos.splice(indice, 1);
+
+  /* Vuelve a dibujar la cuadrícula sin el proyecto eliminado */
+  renderProyectos();
+  showToast('Proyecto eliminado');
+}
+
+
+/* ================================================================
+   6. EDICIÓN DE CONTACTO Y REDES SOCIALES
+   ================================================================ */
+
+/**
+ * openEditContact()
+ * Abre el modal de contacto con los valores actuales prellenados.
+ */
+function openEditContact() {
+  const c = state.contact;
+
+  /* Rellena cada campo con el valor actual del state */
+  document.getElementById('c-whatsapp').value  = c.whatsapp;
+  document.getElementById('c-email').value     = c.email;
+  /* Para URL solo muestra si no es el placeholder '#' */
+  document.getElementById('c-linkedin').value  = c.linkedinUrl  !== '#' ? c.linkedinUrl  : '';
+  document.getElementById('c-github').value    = c.githubUrl    !== '#' ? c.githubUrl    : '';
+  document.getElementById('c-instagram').value = c.instagram    !== '#' ? c.instagram    : '';
+
+  openModal('modal-contact');
+}
+
+
+/**
+ * saveContact()
+ * Guarda los nuevos datos de contacto en el state y actualiza la vista.
+ */
+function saveContact() {
+  const c = state.contact;
+
+  /* Lee los valores del formulario */
+  const nuevoWhatsapp   = document.getElementById('c-whatsapp').value.trim();
+  const nuevoEmail      = document.getElementById('c-email').value.trim();
+  const nuevoLinkedin   = document.getElementById('c-linkedin').value.trim();
+  const nuevoGithub     = document.getElementById('c-github').value.trim();
+  const nuevoInstagram  = document.getElementById('c-instagram').value.trim();
+
+  /* Actualiza el state solo si el campo no está vacío (conserva el valor anterior) */
+  c.whatsapp    = nuevoWhatsapp  || c.whatsapp;
+  c.whatsappUrl = nuevoWhatsapp;
+  c.email       = nuevoEmail     || c.email;
+
+  /* Para LinkedIn y GitHub guarda la URL completa y también el texto corto para mostrar */
+  c.linkedin    = nuevoLinkedin
+    ? nuevoLinkedin.replace('https://', '').replace('http://', '') /* Elimina el protocolo para mostrar */
+    : c.linkedin;
+  c.linkedinUrl = nuevoLinkedin || '#';
+
+  c.github      = nuevoGithub
+    ? nuevoGithub.replace('https://', '').replace('http://', '')
+    : c.github;
+  c.githubUrl   = nuevoGithub || '#';
+
+  c.instagram   = nuevoInstagram || '#';
+
+  /* Actualiza todos los links y textos en pantalla */
+  renderContact();
+  closeModal('modal-contact');
+  showToast('Contacto actualizado ✓', 'success');
+}
+
+
+/* ================================================================
+   7. EDICIÓN DE INFORMACIÓN PERSONAL
+   Permite editar la bio, habilidades y estadísticas desde el admin.
+   ================================================================ */
+
+/**
+ * openEditAbout()
+ * Abre el modal de info personal con los valores actuales del DOM.
+ */
+function openEditAbout() {
+  /* Lee el texto actual directamente de los elementos del DOM */
+  document.getElementById('a-herodesc').value  = document.getElementById('hero-desc').textContent.trim();
+  document.getElementById('a-about').value     = document.getElementById('about-text').innerText.trim();
+  document.getElementById('a-ubicacion').value = document.getElementById('about-ubicacion').textContent.trim();
+
+  /* Convierte los chips de habilidades en texto separado por comas */
+  const chips = Array.from(document.querySelectorAll('#skills-list .skill-tag'));
+  document.getElementById('a-skills').value = chips.map(function(chip) {
+    return chip.textContent;
+  }).join(', ');
+
+  /* Lee las estadísticas actuales */
+  document.getElementById('a-stat-p').value = document.getElementById('stat-proyectos').textContent;
+  document.getElementById('a-stat-e').value = document.getElementById('stat-exp').textContent;
+  document.getElementById('a-stat-c').value = document.getElementById('stat-clientes').textContent;
+  document.getElementById('a-stat-t').value = document.getElementById('stat-tech').textContent;
+
+  openModal('modal-about');
+}
+
+
+/**
+ * saveAbout()
+ * Guarda los cambios de información personal directamente en el DOM.
+ */
+function saveAbout() {
+  const nuevaDescHero   = document.getElementById('a-herodesc').value.trim();
+  const nuevaUbicacion  = document.getElementById('a-ubicacion').value.trim();
+  const nuevasSkills    = document.getElementById('a-skills').value;
+  const nuevaStatP      = document.getElementById('a-stat-p').value;
+  const nuevaStatE      = document.getElementById('a-stat-e').value;
+  const nuevaStatC      = document.getElementById('a-stat-c').value;
+  const nuevaStatT      = document.getElementById('a-stat-t').value;
+
+  /* Solo actualiza si el campo tiene contenido */
+  if (nuevaDescHero)  document.getElementById('hero-desc').textContent        = nuevaDescHero;
+  if (nuevaUbicacion) document.getElementById('about-ubicacion').textContent  = nuevaUbicacion;
+
+  /* Regenera los chips de habilidades a partir del texto separado por comas */
+  if (nuevasSkills) {
+    document.getElementById('skills-list').innerHTML = nuevasSkills
+      .split(',')
+      .map(function(skill) {
+        return `<span class="skill-tag">${skill.trim()}</span>`;
+      })
+      .join('');
+  }
+
+  /* Actualiza las estadísticas (si el campo está vacío conserva el valor anterior) */
+  if (nuevaStatP) document.getElementById('stat-proyectos').textContent = nuevaStatP;
+  if (nuevaStatE) document.getElementById('stat-exp').textContent       = nuevaStatE;
+  if (nuevaStatC) document.getElementById('stat-clientes').textContent  = nuevaStatC;
+  if (nuevaStatT) document.getElementById('stat-tech').textContent      = nuevaStatT;
+
+  closeModal('modal-about');
+  showToast('Información actualizada ✓', 'success');
+}
+
+
+/* ================================================================
+   8. NOTIFICACIONES TOAST
+   Muestra mensajes temporales de confirmación o error.
+   ================================================================ */
+
+/**
+ * showToast(mensaje, tipo)
+ * Muestra una notificación flotante por 3 segundos.
+ * @param {string} mensaje - Texto a mostrar.
+ * @param {string} tipo    - 'success' (verde) | 'error' (rojo) | '' (azul).
+ */
+function showToast(mensaje, tipo) {
+  tipo = tipo || ''; /* Valor por defecto si no se pasa tipo */
+
+  const toast = document.getElementById('toast');
+  toast.textContent = mensaje;
+
+  /* Asigna las clases: "toast success show" o "toast error show" */
+  toast.className = `toast ${tipo} show`;
+
+  /* Oculta automáticamente después de 3 segundos */
+  setTimeout(function() {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+
+/* ================================================================
+   9. NAVEGACIÓN ACTIVA
+   Resalta el enlace del menú correspondiente a la sección
+   que está actualmente visible en pantalla al hacer scroll.
+   ================================================================ */
+
+/* Obtiene todas las secciones con id y todos los enlaces del menú */
+const secciones  = document.querySelectorAll('section[id]');
+const enlacesNav = document.querySelectorAll('nav a');
+
+/* Escucha el evento scroll de la ventana */
+window.addEventListener('scroll', function() {
+  let seccionActual = '';
+
+  /* Determina qué sección está visible según la posición del scroll */
+  secciones.forEach(function(seccion) {
+    /* Si el scroll supera el inicio de la sección (con margen de 100px) */
+    if (window.scrollY >= seccion.offsetTop - 100) {
+      seccionActual = seccion.id; /* Guarda el id de la sección (ej: "proyectos") */
+    }
+  });
+
+  /* Actualiza la clase "active" en el menú */
+  enlacesNav.forEach(function(enlace) {
+    enlace.classList.remove('active'); /* Quita "active" de todos */
+
+    /* Agrega "active" solo al enlace que coincide con la sección actual */
+    if (enlace.getAttribute('href') === `#${seccionActual}`) {
+      enlace.classList.add('active');
+    }
+  });
+});
+
+
+/* ================================================================
+   10. ACCESO SECRETO AL ADMIN
+   Activa el panel de administrador con 3 clics rápidos en el logo.
+   No hay botón visible; el acceso es completamente oculto.
+   ================================================================ */
+(function() {
+  let contadorClics = 0;   /* Cuenta los clics consecutivos */
+  let temporizador  = null; /* Timer para resetear el contador */
+
+  const logo = document.getElementById('logo-secret');
+
+  logo.addEventListener('click', function(evento) {
+    evento.preventDefault(); /* Evita que el clic navegue a #inicio */
+
+    contadorClics++;
+
+    /* Cancela el temporizador anterior si existe */
+    if (temporizador) clearTimeout(temporizador);
+
+    if (contadorClics >= 3) {
+      /* 3 clics consecutivos → abre/cierra el panel admin */
+      contadorClics = 0;
+
+      if (state.isAdmin) {
+        exitAdmin(); /* Si ya era admin, cierra la sesión */
+      } else {
+        openLogin(); /* Si no era admin, abre el login */
+      }
+
+    } else {
+      /* Si no llegó a 3 clics en 500ms, resetea el contador
+         y navega normalmente a la sección inicio */
+      temporizador = setTimeout(function() {
+        contadorClics = 0;
+        window.location.hash = '#inicio';
+      }, 500);
+    }
+  });
+})();
+/* El uso de IIFE (función auto-ejecutable) evita que las variables
+   contadorClics y temporizador contaminen el scope global */
+
+
+/* ================================================================
+   11. INICIALIZACIÓN
+   Se ejecuta automáticamente al cargar la página.
+   Dibuja el contenido inicial en todas las secciones.
+   ================================================================ */
+
+/* Dibuja la cuadrícula de proyectos con los datos de state.proyectos */
+renderProyectos();
+
+/* Dibuja la cuadrícula de servicios con los datos de state.servicios */
+renderServicios();
+
+/* Actualiza los links y textos de contacto con los datos de state.contact */
+renderContact();
+
+</script>
+</body>
+</html>
